@@ -24,14 +24,18 @@
 		statTotal: document.getElementById('stat-total'),
 		progressBar: document.getElementById('progress-bar'),
 
+		btnSound: document.getElementById('btn-sound'),
+
 		questionThai: document.getElementById('question-thai'),
 		questionTranscription: document.getElementById('question-transcription'),
 		questionEnglish: document.getElementById('question-english'),
+		sayQuestion: document.getElementById('say-question'),
 
 		answer: document.getElementById('answer'),
 		answerThai: document.getElementById('answer-thai'),
 		answerTranscription: document.getElementById('answer-transcription'),
 		answerEnglish: document.getElementById('answer-english'),
+		sayAnswer: document.getElementById('say-answer'),
 
 		builder: document.getElementById('builder'),
 		slots: document.getElementById('slots'),
@@ -68,6 +72,78 @@
 		correct: 0,
 		incorrect: 0
 	};
+
+	/* ---------- pronunciation ---------- */
+
+	/*
+	 * Two sources, in order of preference:
+	 *   1. a recording served from the audio directory, when the word has one;
+	 *   2. the browser's own Thai voice, which needs no files and works offline.
+	 * With neither available the speaker buttons stay hidden rather than doing nothing.
+	 */
+	var audio = {
+		on: true,
+		voice: null,
+		player: new Audio()
+	};
+
+	function findThaiVoice() {
+		var voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+		audio.voice = voices.filter(function (voice) { return /^th\b|^th-/i.test(voice.lang); })[0] || null;
+	}
+
+	if (window.speechSynthesis) {
+		findThaiVoice();
+		// Chrome fills the list asynchronously, so the first call above often comes back empty.
+		speechSynthesis.addEventListener('voiceschanged', function () {
+			findThaiVoice();
+			if (state.current) {
+				render();
+			}
+		});
+	}
+
+	function canSpeak(word) {
+		return Boolean(word) && (Boolean(word.audio) || audio.voice !== null);
+	}
+
+	function stopSpeaking() {
+		if (window.speechSynthesis) {
+			speechSynthesis.cancel();
+		}
+		audio.player.pause();
+	}
+
+	function speak(word) {
+		if (!audio.on || !canSpeak(word)) {
+			return;
+		}
+		stopSpeaking();
+		if (word.audio) {
+			audio.player.src = word.audio;
+			// Rejects when the browser blocks playback before any user gesture; harmless.
+			var started = audio.player.play();
+			if (started && started.catch) {
+				started.catch(function () { });
+			}
+			return;
+		}
+		var utterance = new SpeechSynthesisUtterance(word.thai);
+		utterance.voice = audio.voice;
+		utterance.lang = audio.voice.lang;
+		utterance.rate = 0.9;
+		speechSynthesis.speak(utterance);
+	}
+
+	function toggleSound() {
+		audio.on = !audio.on;
+		if (!audio.on) {
+			stopSpeaking();
+		}
+		el.btnSound.title = audio.on ? 'Mute pronunciation' : 'Unmute pronunciation';
+		el.btnSound.setAttribute('aria-label', el.btnSound.title);
+		el.btnSound.classList.toggle('is-off', !audio.on);
+	}
 
 	/* ---------- Thai script ---------- */
 
@@ -175,6 +251,12 @@
 		state.build = state.cardMode === 'build-thai' ? createBuild(state.current.thai) : null;
 		render();
 		updateScoreboard();
+		if (state.cardMode === 'show-thai') {
+			speak(state.current);
+		}
+		else {
+			stopSpeaking();
+		}
 	}
 
 	/** Books the answer, but leaves the card on screen — advance() moves on. */
@@ -329,6 +411,10 @@
 		setText(el.answerTranscription, showThai ? '' : word.transcription);
 		setText(el.answerEnglish, showThai ? word.english : '');
 
+		var speakable = audio.on && canSpeak(word);
+		el.sayQuestion.hidden = !showThai || !speakable;
+		el.sayAnswer.hidden = showThai || !speakable;
+
 		el.answer.hidden = !state.revealed;
 		el.builder.hidden = !building;
 		document.body.classList.toggle('is-building', building);
@@ -357,12 +443,17 @@
 			state.revealed = true;
 			resolve(isAssemblyCorrect());
 			render();
+			speak(state.current);
 			// The answer makes the card taller; keep the way forward on screen.
 			el.btnNext.scrollIntoView({ block: 'nearest' });
 			return;
 		}
 		state.revealed = true;
 		render();
+		// In show-thai mode the word was already spoken when the card came up.
+		if (state.cardMode !== 'show-thai') {
+			speak(state.current);
+		}
 	}
 
 	/** Bails out of a half-built word: counts as a mistake, so the word comes back later. */
@@ -374,6 +465,7 @@
 		state.gaveUp = true;
 		resolve(false);
 		render();
+		speak(state.current);
 		el.btnNext.scrollIntoView({ block: 'nearest' });
 	}
 
@@ -457,6 +549,14 @@
 	el.btnCorrect.addEventListener('click', function () { answer(true); });
 	el.btnIncorrect.addEventListener('click', function () { answer(false); });
 	el.btnRestart.addEventListener('click', startSession);
+	el.sayQuestion.addEventListener('click', function () { speak(state.current); });
+	el.sayAnswer.addEventListener('click', function () { speak(state.current); });
+	el.btnSound.addEventListener('click', function () {
+		toggleSound();
+		if (state.current) {
+			render();
+		}
+	});
 	el.btnReset.addEventListener('click', function () {
 		replayAnimation(el.btnReset, 'is-spinning');
 		if (state.words.length) {

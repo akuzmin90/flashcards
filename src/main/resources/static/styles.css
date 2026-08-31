@@ -42,6 +42,11 @@
 	box-sizing: border-box;
 }
 
+/* The browser's own [hidden] rule is scoped to the HTML namespace, so SVG needs its own. */
+svg[hidden] {
+	display: none;
+}
+
 body {
 	margin: 0;
 	min-height: 100vh;
@@ -81,9 +86,14 @@ body {
 	border-radius: 999px;
 }
 
-.restart {
+.topbar-actions {
 	grid-column: 3;
 	justify-self: end;
+	display: flex;
+	gap: 0.5rem;
+}
+
+.icon-btn {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -98,22 +108,69 @@ body {
 	transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.restart:hover {
+.icon-btn:hover {
 	color: var(--blue);
 	border-color: var(--blue);
 }
 
-.restart:focus-visible {
+.icon-btn:focus-visible {
 	outline: 3px solid var(--blue);
 	outline-offset: 2px;
+}
+
+.icon-btn.is-off {
+	color: var(--red);
+	border-color: var(--red);
+}
+
+/* SVG has no `hidden` IDL property, so the icons swap on a class instead. */
+.icon-sound-off,
+.icon-btn.is-off .icon-sound-on {
+	display: none;
+}
+
+.icon-btn.is-off .icon-sound-off {
+	display: block;
 }
 
 @keyframes spin {
 	to { transform: rotate(360deg); }
 }
 
-.restart.is-spinning svg {
+.icon-btn.is-spinning svg {
 	animation: spin 0.5s ease-in-out;
+}
+
+/* Replay button under the Thai word inside the card. */
+.say {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	margin-top: 0.75rem;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--surface);
+	color: var(--muted);
+	cursor: pointer;
+	transition: color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+.say:hover {
+	color: var(--blue);
+	border-color: var(--blue);
+	transform: scale(1.08);
+}
+
+.say:focus-visible {
+	outline: 3px solid var(--blue);
+	outline-offset: 2px;
+}
+
+.say[hidden] {
+	display: none;
 }
 
 .tab {
