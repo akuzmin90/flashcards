@@ -1,0 +1,348 @@
+:root {
+	--bg-top: #eef2fb;
+	--bg-bottom: #f8fafc;
+	--surface: #ffffff;
+	--surface-soft: #f1f5f9;
+	--border: #e2e8f0;
+	--text: #0f172a;
+	--muted: #64748b;
+	--blue: #2563eb;
+	--blue-dark: #1d4ed8;
+	--green: #16a34a;
+	--green-dark: #15803d;
+	--red: #dc2626;
+	--red-dark: #b91c1c;
+	--shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+	--font-latin: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--font-thai: "Noto Sans Thai", "Leelawadee UI", "Sarabun", Tahoma, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg-top: #0b1220;
+		--bg-bottom: #131c2e;
+		--surface: #1a2436;
+		--surface-soft: #22304a;
+		--border: #2b3a54;
+		--text: #e8eefb;
+		--muted: #94a3b8;
+		--blue: #3b82f6;
+		--blue-dark: #2563eb;
+		--green: #22c55e;
+		--green-dark: #16a34a;
+		--red: #ef4444;
+		--red-dark: #dc2626;
+		--shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+	color: var(--text);
+	font-family: var(--font-latin);
+	-webkit-font-smoothing: antialiased;
+}
+
+/* ---------- scoreboard ---------- */
+
+.scoreboard {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	gap: clamp(1.5rem, 6vw, 5rem);
+	padding: 1.25rem 1.5rem 1.5rem;
+	background: var(--surface);
+	border-bottom: 1px solid var(--border);
+	box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+}
+
+.stat {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.15rem;
+	min-width: 5.5rem;
+}
+
+.stat-label {
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.stat-value {
+	font-size: 1.75rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	line-height: 1.1;
+}
+
+.stat-correct .stat-value {
+	color: var(--green);
+}
+
+.stat-incorrect .stat-value {
+	color: var(--red);
+}
+
+.stat-total {
+	color: var(--muted);
+	font-size: 1.1rem;
+	font-weight: 600;
+}
+
+.progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 4px;
+	background: var(--surface-soft);
+}
+
+.progress-bar {
+	height: 100%;
+	width: 0;
+	background: var(--green);
+	transition: width 0.35s ease;
+}
+
+/* ---------- layout ---------- */
+
+main {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem 1.5rem;
+	/* nudges the card slightly above the vertical centre */
+	padding-bottom: clamp(4rem, 14vh, 10rem);
+}
+
+.screen {
+	width: 100%;
+	max-width: 46rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2.25rem;
+}
+
+.screen[hidden] {
+	display: none;
+}
+
+/* ---------- card ---------- */
+
+.card {
+	width: 100%;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 1.5rem;
+	box-shadow: var(--shadow);
+	padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 3rem);
+	text-align: center;
+	overflow-wrap: break-word;
+}
+
+.thai {
+	font-family: var(--font-thai);
+	font-size: clamp(2.75rem, 9vw, 5.25rem);
+	line-height: 1.45;
+	font-weight: 600;
+}
+
+.transcription {
+	font-size: clamp(1.25rem, 3.5vw, 2rem);
+	color: var(--muted);
+	margin-top: 0.35rem;
+	font-style: italic;
+}
+
+.english {
+	font-size: clamp(1.9rem, 6vw, 3.5rem);
+	line-height: 1.3;
+	font-weight: 600;
+}
+
+.thai[hidden], .transcription[hidden], .english[hidden] {
+	display: none;
+}
+
+.answer {
+	margin-top: 1.75rem;
+	padding-top: 1.75rem;
+	border-top: 2px dashed var(--border);
+	animation: reveal 0.22s ease-out;
+}
+
+.answer[hidden] {
+	display: none;
+}
+
+@keyframes reveal {
+	from { opacity: 0; transform: translateY(-6px); }
+	to { opacity: 1; transform: none; }
+}
+
+/* ---------- buttons ---------- */
+
+.controls {
+	width: 100%;
+	max-width: 34rem;
+}
+
+.btn {
+	width: 100%;
+	padding: 1.15rem 1.5rem;
+	border: none;
+	border-radius: 1rem;
+	font-family: inherit;
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: #fff;
+	cursor: pointer;
+	box-shadow: 0 8px 20px rgba(15, 23, 42, 0.14);
+	transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+	transform: translateY(-2px);
+}
+
+.btn:active {
+	transform: translateY(1px);
+	box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+}
+
+.btn:focus-visible {
+	outline: 3px solid var(--text);
+	outline-offset: 3px;
+}
+
+.btn-show {
+	background: var(--blue);
+}
+
+.btn-show:hover {
+	background: var(--blue-dark);
+}
+
+.btn-show[hidden] {
+	display: none;
+}
+
+.verdict {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.verdict[hidden] {
+	display: none;
+}
+
+.btn-incorrect {
+	background: var(--red);
+}
+
+.btn-incorrect:hover {
+	background: var(--red-dark);
+}
+
+.btn-correct {
+	background: var(--green);
+}
+
+.btn-correct:hover {
+	background: var(--green-dark);
+}
+
+.hint {
+	margin: -1rem 0 0;
+	font-size: 0.85rem;
+	color: var(--muted);
+}
+
+/* ---------- results ---------- */
+
+.results-title {
+	margin: 0;
+	font-size: clamp(2rem, 6vw, 3rem);
+	text-align: center;
+}
+
+.results-subtitle {
+	margin: -1.5rem 0 0;
+	font-size: 1.15rem;
+	color: var(--muted);
+	text-align: center;
+}
+
+.results-grid {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+}
+
+.result-tile {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 1.25rem;
+	box-shadow: var(--shadow);
+	padding: 1.75rem 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.result-value {
+	font-size: clamp(2.25rem, 7vw, 3.25rem);
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+}
+
+.result-correct .result-value {
+	color: var(--green);
+}
+
+.result-incorrect .result-value {
+	color: var(--red);
+}
+
+.result-label {
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+	color: var(--muted);
+	text-align: center;
+}
+
+#results-screen .btn-show,
+#btn-restart {
+	max-width: 22rem;
+}
+
+@media (max-width: 30rem) {
+	.results-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.scoreboard {
+		gap: 1.25rem;
+	}
+}

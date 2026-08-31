@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Thai Flashcards</title>
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇹🇭</text></svg>">
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="scoreboard">
+	<div class="stat stat-correct">
+		<span class="stat-label">Correct</span>
+		<span class="stat-value" id="stat-correct">0</span>
+	</div>
+	<div class="stat stat-incorrect">
+		<span class="stat-label">Incorrect</span>
+		<span class="stat-value" id="stat-incorrect">0</span>
+	</div>
+	<div class="stat stat-remaining">
+		<span class="stat-label">Words left</span>
+		<span class="stat-value"><span id="stat-remaining">0</span> <span class="stat-total">/ <span id="stat-total">0</span></span></span>
+	</div>
+	<div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+</header>
+
+<main>
+
+	<section id="card-screen" class="screen">
+		<div class="card">
+			<div class="question">
+				<div class="thai" id="question-thai" hidden></div>
+				<div class="transcription" id="question-transcription" hidden></div>
+				<div class="english" id="question-english" hidden></div>
+			</div>
+			<div class="answer" id="answer" hidden>
+				<div class="thai" id="answer-thai" hidden></div>
+				<div class="transcription" id="answer-transcription" hidden></div>
+				<div class="english" id="answer-english" hidden></div>
+			</div>
+		</div>
+
+		<div class="controls">
+			<button type="button" class="btn btn-show" id="btn-show">Show answer</button>
+			<div class="verdict" id="verdict" hidden>
+				<button type="button" class="btn btn-incorrect" id="btn-incorrect">Incorrect</button>
+				<button type="button" class="btn btn-correct" id="btn-correct">Correct</button>
+			</div>
+		</div>
+
+		<p class="hint" id="hint">Space — show answer</p>
+	</section>
+
+	<section id="results-screen" class="screen" hidden>
+		<h1 class="results-title">Session complete</h1>
+		<p class="results-subtitle" id="results-subtitle"></p>
+		<div class="results-grid">
+			<div class="result-tile result-correct">
+				<span class="result-value" id="result-correct">0</span>
+				<span class="result-label">Correct answers</span>
+			</div>
+			<div class="result-tile result-incorrect">
+				<span class="result-value" id="result-incorrect">0</span>
+				<span class="result-label">Mistakes</span>
+			</div>
+			<div class="result-tile result-total">
+				<span class="result-value" id="result-total">0</span>
+				<span class="result-label">Words learned</span>
+			</div>
+		</div>
+		<button type="button" class="btn btn-show" id="btn-restart">Start again</button>
+	</section>
+
+	<section id="error-screen" class="screen" hidden>
+		<h1 class="results-title">Nothing to study</h1>
+		<p class="results-subtitle" id="error-message"></p>
+	</section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
