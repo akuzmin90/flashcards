@@ -20,77 +20,77 @@
 ตรงไปตรงมา=dtrong bpai dtrong maa=frankly ; straightforwardly ; openly
 อบอุ่น=òp ùn=[to be] warm ; genial ; friendly
 ล้อม=lóm=[to] besiege ; surround ; encircle
-กินใจ=gin jai=[to be] moving ; profound ; deep
-มิตรภาพ=mít-dtrà-pâap=friendship ; friendliness ; cordiality
-แด่=dàe=to ; for
-เพื่อนซี้=pêuuan sée=close friend ; bosom friend ; intimate friend
-หลุมดำ=lŭm dam=black hole
-รอด=rôt=[to] survive ; escape from death ; save
-ลบ=lóp=[to] remove ; delete ; take away
-ชัดเจน=chát jen=clearly ; distinctly ; obviously
-ประนีประนอม=bprà-nee-bprà-nom=[to] compromise ; come to terms with ; reconcile
-ความหลัง=kwaam lăng=past ; background
-สนับสนุน=sà-nàp-sà-nŭn=[to] support ; aid ; give support to
-โฆษณา=kôht-sà-naa=[to] advertise ; publicize ; announce
-อวกาศ=à-wá-gàat=space
-ต่อสู้=dtòr sôo=[to] fight ; battle ; struggle
-กระรอก=grà-rôk=squirrel
-เลิศ=lêrt=[to be] excellent ; first-rate ; perfect
-วัฒนธรรม=wát-tá-ná-tam=culture ; civilization ; way of life
-ขึ้นอยู่กับ=kêun yòo gàp=[to] depend on ; hinge on ; be decided by
-บริบท=bor-rí-bòt=context
-ผสมพันธุ์=pà-sŏm pan=[to] breed
-ผูก=pòok=[to] attach ; bind ; tie
-ห่าง=hàang=[to be] far away ; distant
-บัตรเชิญ=bàt chern=invitation
-หงุดหงิด=ngùt-ngìt=[to be] moody
-ไปรษณีย์=bprai-sà-nee=post ; mail
-พัฒนาการ=pát-tá-naa gaan=development ; growth ; progress
-คลี่คลาย=klêe klaai=[to] ease up ; improve ; become better
-สวะ=sà-wà=floating weeds ; Java weed ; floating rubbish
-เวท=wêt=incantation ; magic ; sorcery
-แค้น=káen=[to be] angry ; [to be] furious ; rankle
-ศัตรู=sàt-dtroo=enemy ; foe ; opponent
-ออกจะ=òk jà=rather ; somewhat
-เห็นแก่ตัว=hĕn gàe dtuua=[to be] selfish ; greedy
-ประหม่า=bprà-màa=[to] lose self-confidence
-เจ๋ง=jĕng=[to be] great ; cool ; smart
-จังหวะ=jang-wà=rhythm ; beat
-ลาก=lâak=[to] drag
-เท่=tây=[to be] stylish ; [to be] smart ; [to be] cool
-ขา=kăa=leg ; limb ; foot
-เชื่อมโยง=chêuuam yohng=link
-ประกาศ=bprà-gàat=[to] announce ; notify ; declare
-ชม=chom=[to] see ; watch ; look
-ชะมัด=chá-mát=extremely ; terribly ; awfully
-แกล้ง=glâeng=[to] tease ; irritate ; annoy
-หรูหรา=rŏo răa=[to be] elegant ; fancy ; sophisticated
-ศรัทธา=sàt-taa=[to] believe in ; have trust ; confidence in
-อำนาจ=am-nâat=power ; authority
-การกระทำ=gaan grà-tam=act ; action
-ผล=pŏn=result ; effect ; consequence
-ประวัติ=bprà-wàt=history ; record ; annals
-ตบ=dtòp=[to] slap ; swat ; pat
-รับมือ=ráp meu=[to] cope with ; deal with ; encounter
-ระเบิด=rá-bèrt=[to] blow up ; burst ; explode
-รับปาก=ráp bpàak=[to] give one's word ; promise ; assure
-วิชา=wí-chaa=subject ; knowledge ; branch of knowledge
-คืน=keun=night
-ชุมชน=chum chon=community ; crowd ; mass
-มโน=má-noh=heart ; mind
-ล้มเหลว=lóm lĕo=[to] fail ; fall down ; not succeed
-อัจฉริยะ=àt-chà-rí-yá=genius ; bright ; exceptional
-กดดัน=gòt dan=[to] force ; press ; compel
-ต้อนรับ=dtôn ráp=[to] welcome ; receive ; greet
-ประชัน=bprà-chan=[to] compete ; contest ; vie
-หุ่นยนต์=hùn yon=robot
-มื้อค่ำ=méu kâm=dinner
-ด้อย=dôi=[to] inferior ; poorer ; lower
-ความสามารถ=kwaam săa-mâat=capability ; ability ; talent
-หลานชาย=lăan chaai=nephew ; grandson
-อาวุธ=aa-wút=weapon
-ถอย=tŏi=[to] retreat ; move back ; withdraw
-ลอย=loi=[to] float ; drift
-สวดมนต์=sùuat mon=[to] pray
-โบสถ์=bòht=Buddhist temple ; Buddhist monastery
-พิลึก=pí-léuk=[to be] strange ; odd ; weird
+# กินใจ=gin jai=[to be] moving ; profound ; deep
+# มิตรภาพ=mít-dtrà-pâap=friendship ; friendliness ; cordiality
+# แด่=dàe=to ; for
+# เพื่อนซี้=pêuuan sée=close friend ; bosom friend ; intimate friend
+# หลุมดำ=lŭm dam=black hole
+# รอด=rôt=[to] survive ; escape from death ; save
+# ลบ=lóp=[to] remove ; delete ; take away
+# ชัดเจน=chát jen=clearly ; distinctly ; obviously
+# ประนีประนอม=bprà-nee-bprà-nom=[to] compromise ; come to terms with ; reconcile
+# ความหลัง=kwaam lăng=past ; background
+# สนับสนุน=sà-nàp-sà-nŭn=[to] support ; aid ; give support to
+# โฆษณา=kôht-sà-naa=[to] advertise ; publicize ; announce
+# อวกาศ=à-wá-gàat=space
+# ต่อสู้=dtòr sôo=[to] fight ; battle ; struggle
+# กระรอก=grà-rôk=squirrel
+# เลิศ=lêrt=[to be] excellent ; first-rate ; perfect
+# วัฒนธรรม=wát-tá-ná-tam=culture ; civilization ; way of life
+# ขึ้นอยู่กับ=kêun yòo gàp=[to] depend on ; hinge on ; be decided by
+# บริบท=bor-rí-bòt=context
+# ผสมพันธุ์=pà-sŏm pan=[to] breed
+# ผูก=pòok=[to] attach ; bind ; tie
+# ห่าง=hàang=[to be] far away ; distant
+# บัตรเชิญ=bàt chern=invitation
+# หงุดหงิด=ngùt-ngìt=[to be] moody
+# ไปรษณีย์=bprai-sà-nee=post ; mail
+# พัฒนาการ=pát-tá-naa gaan=development ; growth ; progress
+# คลี่คลาย=klêe klaai=[to] ease up ; improve ; become better
+# สวะ=sà-wà=floating weeds ; Java weed ; floating rubbish
+# เวท=wêt=incantation ; magic ; sorcery
+# แค้น=káen=[to be] angry ; [to be] furious ; rankle
+# ศัตรู=sàt-dtroo=enemy ; foe ; opponent
+# ออกจะ=òk jà=rather ; somewhat
+# เห็นแก่ตัว=hĕn gàe dtuua=[to be] selfish ; greedy
+# ประหม่า=bprà-màa=[to] lose self-confidence
+# เจ๋ง=jĕng=[to be] great ; cool ; smart
+# จังหวะ=jang-wà=rhythm ; beat
+# ลาก=lâak=[to] drag
+# เท่=tây=[to be] stylish ; [to be] smart ; [to be] cool
+# ขา=kăa=leg ; limb ; foot
+# เชื่อมโยง=chêuuam yohng=link
+# ประกาศ=bprà-gàat=[to] announce ; notify ; declare
+# ชม=chom=[to] see ; watch ; look
+# ชะมัด=chá-mát=extremely ; terribly ; awfully
+# แกล้ง=glâeng=[to] tease ; irritate ; annoy
+# หรูหรา=rŏo răa=[to be] elegant ; fancy ; sophisticated
+# ศรัทธา=sàt-taa=[to] believe in ; have trust ; confidence in
+# อำนาจ=am-nâat=power ; authority
+# การกระทำ=gaan grà-tam=act ; action
+# ผล=pŏn=result ; effect ; consequence
+# ประวัติ=bprà-wàt=history ; record ; annals
+# ตบ=dtòp=[to] slap ; swat ; pat
+# รับมือ=ráp meu=[to] cope with ; deal with ; encounter
+# ระเบิด=rá-bèrt=[to] blow up ; burst ; explode
+# รับปาก=ráp bpàak=[to] give one's word ; promise ; assure
+# วิชา=wí-chaa=subject ; knowledge ; branch of knowledge
+# คืน=keun=night
+# ชุมชน=chum chon=community ; crowd ; mass
+# มโน=má-noh=heart ; mind
+# ล้มเหลว=lóm lĕo=[to] fail ; fall down ; not succeed
+# อัจฉริยะ=àt-chà-rí-yá=genius ; bright ; exceptional
+# กดดัน=gòt dan=[to] force ; press ; compel
+# ต้อนรับ=dtôn ráp=[to] welcome ; receive ; greet
+# ประชัน=bprà-chan=[to] compete ; contest ; vie
+# หุ่นยนต์=hùn yon=robot
+# มื้อค่ำ=méu kâm=dinner
+# ด้อย=dôi=[to] inferior ; poorer ; lower
+# ความสามารถ=kwaam săa-mâat=capability ; ability ; talent
+# หลานชาย=lăan chaai=nephew ; grandson
+# อาวุธ=aa-wút=weapon
+# ถอย=tŏi=[to] retreat ; move back ; withdraw
+# ลอย=loi=[to] float ; drift
+# สวดมนต์=sùuat mon=[to] pray
+# โบสถ์=bòht=Buddhist temple ; Buddhist monastery
+# พิลึก=pí-léuk=[to be] strange ; odd ; weird

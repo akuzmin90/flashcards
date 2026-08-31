@@ -6,8 +6,12 @@
 
 	var CARD_MODES = {
 		easy: ['show-thai', 'show-english'],
-		medium: ['show-thai', 'show-english', 'build-thai']
+		medium: ['show-thai', 'show-english', 'build-thai'],
+		hard: ['show-thai', 'show-english', 'build-thai', 'type-thai']
 	};
+
+	/** Card modes with an objectively right answer — no need to ask the user how they did. */
+	var AUTO_GRADED = ['build-thai', 'type-thai'];
 
 	var el = {
 		tabs: document.getElementById('tabs'),
@@ -40,7 +44,9 @@
 		builder: document.getElementById('builder'),
 		slots: document.getElementById('slots'),
 		pool: document.getElementById('pool'),
-		buildVerdict: document.getElementById('build-verdict'),
+		typing: document.getElementById('typing'),
+		input: document.getElementById('answer-input'),
+		grade: document.getElementById('grade'),
 
 		btnShow: document.getElementById('btn-show'),
 		btnGiveUp: document.getElementById('btn-giveup'),
@@ -176,6 +182,18 @@
 		return chars.slice().sort().join('');
 	}
 
+	function wordKey(word) {
+		return decompose(word.replace(/\s+/g, '')).map(squareKey).join('|');
+	}
+
+	/**
+	 * Two spellings of the same word. Tolerates the order marks were entered in — typing
+	 * a tone mark before the vowel above it gives a different string but the same word.
+	 */
+	function sameWord(typed, target) {
+		return wordKey(typed) === wordKey(target);
+	}
+
 	function canBuild(word) {
 		return !/\s/.test(word.thai) && decompose(word.thai).length > 0;
 	}
@@ -203,7 +221,7 @@
 		el.resultsScreen.hidden = screen !== el.resultsScreen;
 		el.errorScreen.hidden = screen !== el.errorScreen;
 		if (screen !== el.cardScreen) {
-			document.body.classList.remove('is-building');
+			document.body.classList.remove('is-compact');
 		}
 	}
 
@@ -249,7 +267,12 @@
 		state.revealed = false;
 		state.gaveUp = false;
 		state.build = state.cardMode === 'build-thai' ? createBuild(state.current.thai) : null;
+		el.input.value = '';
+		el.input.disabled = false;
 		render();
+		if (state.cardMode === 'type-thai') {
+			el.input.focus();
+		}
 		updateScoreboard();
 		if (state.cardMode === 'show-thai') {
 			speak(state.current);
@@ -381,27 +404,57 @@
 			el.pool.appendChild(node);
 		});
 
-		el.buildVerdict.hidden = !state.revealed;
-		el.buildVerdict.className = 'build-verdict' + (state.wasCorrect ? ' is-correct' : ' is-wrong');
-		el.buildVerdict.textContent = state.wasCorrect ? '✓ Correct' : (state.gaveUp ? '✗ Gave up' : '✗ Not quite');
+	}
+
+	/* ---------- self-graded answers ---------- */
+
+	function isAutoGraded() {
+		return AUTO_GRADED.indexOf(state.cardMode) !== -1;
+	}
+
+	/** Whether there is enough of an answer to grade; until then the card offers Give up instead. */
+	function isReady() {
+		if (state.cardMode === 'build-thai') {
+			return isAssembled();
+		}
+		if (state.cardMode === 'type-thai') {
+			return el.input.value.trim().length > 0;
+		}
+		return true;
+	}
+
+	function isAnswerCorrect() {
+		return state.cardMode === 'build-thai'
+			? isAssemblyCorrect()
+			: sameWord(el.input.value, state.current.thai);
+	}
+
+	function renderGrade() {
+		el.grade.hidden = !state.revealed || !isAutoGraded();
+		el.grade.className = 'grade' + (state.wasCorrect ? ' is-correct' : ' is-wrong');
+		el.grade.textContent = state.wasCorrect ? '✓ Correct' : (state.gaveUp ? '✗ Gave up' : '✗ Not quite');
 	}
 
 	/* ---------- rendering ---------- */
 
 	function hintText() {
 		if (state.revealed) {
-			return state.cardMode === 'build-thai' ? 'Space — next word' : '← Incorrect · Correct →';
+			return isAutoGraded() ? 'Space — next word' : '← Incorrect · Correct →';
 		}
-		if (state.cardMode === 'build-thai' && !isAssembled()) {
-			return 'Tap the letters to spell the word · Esc — give up';
+		if (isAutoGraded() && !isReady()) {
+			return state.cardMode === 'build-thai'
+				? 'Tap the letters to spell the word · Esc — give up'
+				: 'Type the Thai spelling · Enter — check · Esc — give up';
 		}
-		return 'Space — show answer';
+		return state.cardMode === 'type-thai' ? 'Enter — check answer' : 'Space — show answer';
 	}
 
 	function render() {
 		var word = state.current;
 		var showThai = state.cardMode === 'show-thai';
 		var building = state.cardMode === 'build-thai';
+		var typing = state.cardMode === 'type-thai';
+		var ready = isReady();
 
 		setText(el.questionThai, showThai ? word.thai : '');
 		setText(el.questionTranscription, showThai ? word.transcription : '');
@@ -417,15 +470,23 @@
 
 		el.answer.hidden = !state.revealed;
 		el.builder.hidden = !building;
-		document.body.classList.toggle('is-building', building);
+		el.typing.hidden = !typing;
+		document.body.classList.toggle('is-compact', building || typing);
 		if (building) {
 			renderBuilder();
 		}
+		if (typing) {
+			el.input.disabled = state.revealed;
+			el.input.className = 'answer-input'
+				+ (state.revealed ? (state.wasCorrect ? ' is-correct' : ' is-wrong') : '');
+		}
+		renderGrade();
 
-		el.btnShow.hidden = state.revealed || (building && !isAssembled());
-		el.btnGiveUp.hidden = !building || state.revealed || isAssembled();
-		el.btnNext.hidden = !state.revealed || !building;
-		el.verdict.hidden = !state.revealed || building;
+		el.btnShow.textContent = typing ? 'Check answer' : 'Show answer';
+		el.btnShow.hidden = state.revealed || !ready;
+		el.btnGiveUp.hidden = state.revealed || !isAutoGraded() || ready;
+		el.btnNext.hidden = !state.revealed || !isAutoGraded();
+		el.verdict.hidden = !state.revealed || isAutoGraded();
 		el.hint.textContent = hintText();
 	}
 
@@ -435,13 +496,14 @@
 		if (state.revealed || !state.current) {
 			return;
 		}
-		if (state.cardMode === 'build-thai') {
-			if (!isAssembled()) {
+		if (isAutoGraded()) {
+			if (!isReady()) {
 				return;
 			}
 			// Nothing to trust the user about here — the spelling grades itself.
 			state.revealed = true;
-			resolve(isAssemblyCorrect());
+			resolve(isAnswerCorrect());
+			el.input.blur();
 			render();
 			speak(state.current);
 			// The answer makes the card taller; keep the way forward on screen.
@@ -456,21 +518,22 @@
 		}
 	}
 
-	/** Bails out of a half-built word: counts as a mistake, so the word comes back later. */
+	/** Bails out of an unfinished answer: counts as a mistake, so the word comes back later. */
 	function giveUp() {
-		if (state.revealed || state.cardMode !== 'build-thai' || isAssembled()) {
+		if (state.revealed || !isAutoGraded() || isReady()) {
 			return;
 		}
 		state.revealed = true;
 		state.gaveUp = true;
 		resolve(false);
+		el.input.blur();
 		render();
 		speak(state.current);
 		el.btnNext.scrollIntoView({ block: 'nearest' });
 	}
 
 	function answer(isCorrect) {
-		if (!state.revealed || !state.current || state.cardMode === 'build-thai') {
+		if (!state.revealed || !state.current || isAutoGraded()) {
 			return;
 		}
 		resolve(isCorrect);
@@ -523,6 +586,18 @@
 		if (el.cardScreen.hidden) {
 			return;
 		}
+		// While an answer is being typed the field owns the keyboard — Space is a Thai
+		// letter's neighbour, not a "show answer" shortcut. Only submit and bail stay global.
+		if (event.target === el.input) {
+			if (event.key === 'Enter') {
+				event.preventDefault();
+				reveal();
+			}
+			else if (event.key === 'Escape') {
+				giveUp();
+			}
+			return;
+		}
 		if (event.key === ' ' || event.key === 'Enter') {
 			event.preventDefault();
 			if (state.revealed) {
@@ -545,6 +620,12 @@
 
 	el.btnShow.addEventListener('click', reveal);
 	el.btnGiveUp.addEventListener('click', giveUp);
+	// Typing the first character swaps Give up for Check answer, and vice versa.
+	el.input.addEventListener('input', function () {
+		if (state.current && !state.revealed) {
+			render();
+		}
+	});
 	el.btnNext.addEventListener('click', advance);
 	el.btnCorrect.addEventListener('click', function () { answer(true); });
 	el.btnIncorrect.addEventListener('click', function () { answer(false); });

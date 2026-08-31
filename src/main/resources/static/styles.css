@@ -286,34 +286,34 @@ main {
 }
 
 /*
- * The builder adds two rows of squares to the card, so the same generous spacing
- * would push the action button below the fold. Tighten everything while it is up.
+ * The builder and the input field add a block below the card, so the same generous
+ * spacing would push the action button below the fold. Tighten it while they are up.
  */
-body.is-building main {
+body.is-compact main {
 	padding-bottom: 2rem;
 }
 
-body.is-building .screen {
+body.is-compact .screen {
 	gap: 1.5rem;
 }
 
-body.is-building .card {
+body.is-compact .card {
 	padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 4vw, 3rem);
 }
 
-body.is-building .thai {
+body.is-compact .thai {
 	font-size: clamp(2rem, 6vw, 3.25rem);
 }
 
-body.is-building .english {
+body.is-compact .english {
 	font-size: clamp(1.5rem, 4vw, 2.25rem);
 }
 
-body.is-building .transcription {
+body.is-compact .transcription {
 	font-size: clamp(1.1rem, 2.5vw, 1.5rem);
 }
 
-body.is-building .answer {
+body.is-compact .answer {
 	margin-top: 1.25rem;
 	padding-top: 1.25rem;
 }
@@ -487,21 +487,71 @@ body.is-building .answer {
 	border-color: var(--red);
 }
 
-.build-verdict {
+/* ---------- typed answer ---------- */
+
+.typing {
+	width: 100%;
+	max-width: 34rem;
+}
+
+.typing[hidden] {
+	display: none;
+}
+
+.answer-input {
+	width: 100%;
+	padding: 0.9rem 1.25rem;
+	font-family: var(--font-thai);
+	font-size: 2rem;
+	line-height: 1.5;
+	text-align: center;
+	color: var(--text);
+	background: var(--surface);
+	border: 2px solid var(--border-strong);
+	border-radius: 1rem;
+	box-shadow: var(--shadow);
+	outline: none;
+}
+
+.answer-input::placeholder {
+	font-family: var(--font-latin);
+	font-size: 1.1rem;
+	color: var(--muted);
+}
+
+.answer-input:focus {
+	border-color: var(--blue);
+}
+
+.answer-input.is-correct {
+	border-color: var(--green);
+}
+
+.answer-input.is-wrong {
+	border-color: var(--red);
+}
+
+.answer-input:disabled {
+	opacity: 1;
+}
+
+/* ---------- self-graded verdict ---------- */
+
+.grade {
 	margin: 0;
 	font-size: 1.25rem;
 	font-weight: 700;
 }
 
-.build-verdict[hidden] {
+.grade[hidden] {
 	display: none;
 }
 
-.build-verdict.is-correct {
+.grade.is-correct {
 	color: var(--green);
 }
 
-.build-verdict.is-wrong {
+.grade.is-wrong {
 	color: var(--red);
 }
 

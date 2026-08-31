@@ -14,7 +14,7 @@
 		<nav class="tabs" id="tabs">
 			<button type="button" class="tab" data-mode="easy">Easy</button>
 			<button type="button" class="tab is-active" data-mode="medium">Medium</button>
-			<button type="button" class="tab" data-mode="hard" disabled title="Coming soon">Hard</button>
+			<button type="button" class="tab" data-mode="hard">Hard</button>
 		</nav>
 		<div class="topbar-actions">
 			<button type="button" class="icon-btn" id="btn-sound" title="Mute pronunciation" aria-label="Mute pronunciation">
@@ -94,8 +94,14 @@
 		<div class="builder" id="builder" hidden>
 			<div class="slots" id="slots"></div>
 			<div class="pool" id="pool"></div>
-			<p class="build-verdict" id="build-verdict" hidden></p>
 		</div>
+
+		<div class="typing" id="typing" hidden>
+			<input type="text" id="answer-input" class="answer-input" lang="th" placeholder="Type it in Thai"
+					autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+		</div>
+
+		<p class="grade" id="grade" hidden></p>
 
 		<div class="controls">
 			<button type="button" class="btn btn-show" id="btn-show">Show answer</button>
