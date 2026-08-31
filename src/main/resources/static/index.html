@@ -9,19 +9,37 @@
 </head>
 <body>
 
-<header class="scoreboard">
-	<div class="stat stat-correct">
-		<span class="stat-label">Correct</span>
-		<span class="stat-value" id="stat-correct">0</span>
+<header class="topbar">
+	<div class="tabs-row">
+		<nav class="tabs" id="tabs">
+			<button type="button" class="tab" data-mode="easy">Easy</button>
+			<button type="button" class="tab is-active" data-mode="medium">Medium</button>
+			<button type="button" class="tab" data-mode="hard" disabled title="Coming soon">Hard</button>
+		</nav>
+		<button type="button" class="restart" id="btn-reset" title="Restart session" aria-label="Restart session">
+			<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+					stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<polyline points="23 4 23 10 17 10"></polyline>
+				<path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+			</svg>
+		</button>
 	</div>
-	<div class="stat stat-incorrect">
-		<span class="stat-label">Incorrect</span>
-		<span class="stat-value" id="stat-incorrect">0</span>
+
+	<div class="scoreboard">
+		<div class="stat stat-correct">
+			<span class="stat-label">Correct</span>
+			<span class="stat-value" id="stat-correct">0</span>
+		</div>
+		<div class="stat stat-incorrect">
+			<span class="stat-label">Incorrect</span>
+			<span class="stat-value" id="stat-incorrect">0</span>
+		</div>
+		<div class="stat stat-remaining">
+			<span class="stat-label">Words left</span>
+			<span class="stat-value"><span id="stat-remaining">0</span> <span class="stat-total">/ <span id="stat-total">0</span></span></span>
+		</div>
 	</div>
-	<div class="stat stat-remaining">
-		<span class="stat-label">Words left</span>
-		<span class="stat-value"><span id="stat-remaining">0</span> <span class="stat-total">/ <span id="stat-total">0</span></span></span>
-	</div>
+
 	<div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
 </header>
 
@@ -41,8 +59,16 @@
 			</div>
 		</div>
 
+		<div class="builder" id="builder" hidden>
+			<div class="slots" id="slots"></div>
+			<div class="pool" id="pool"></div>
+			<p class="build-verdict" id="build-verdict" hidden></p>
+		</div>
+
 		<div class="controls">
 			<button type="button" class="btn btn-show" id="btn-show">Show answer</button>
+			<button type="button" class="btn btn-giveup" id="btn-giveup" hidden>Give up</button>
+			<button type="button" class="btn btn-show" id="btn-next" hidden>Next</button>
 			<div class="verdict" id="verdict" hidden>
 				<button type="button" class="btn btn-incorrect" id="btn-incorrect">Incorrect</button>
 				<button type="button" class="btn btn-correct" id="btn-correct">Correct</button>

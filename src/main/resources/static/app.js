@@ -1,7 +1,18 @@
 (function () {
 	'use strict';
 
+	/** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
+	var DOTTED_CIRCLE = '◌';
+
+	var CARD_MODES = {
+		easy: ['show-thai', 'show-english'],
+		medium: ['show-thai', 'show-english', 'build-thai']
+	};
+
 	var el = {
+		tabs: document.getElementById('tabs'),
+		btnReset: document.getElementById('btn-reset'),
+
 		cardScreen: document.getElementById('card-screen'),
 		resultsScreen: document.getElementById('results-screen'),
 		errorScreen: document.getElementById('error-screen'),
@@ -22,7 +33,14 @@
 		answerTranscription: document.getElementById('answer-transcription'),
 		answerEnglish: document.getElementById('answer-english'),
 
+		builder: document.getElementById('builder'),
+		slots: document.getElementById('slots'),
+		pool: document.getElementById('pool'),
+		buildVerdict: document.getElementById('build-verdict'),
+
 		btnShow: document.getElementById('btn-show'),
+		btnGiveUp: document.getElementById('btn-giveup'),
+		btnNext: document.getElementById('btn-next'),
 		verdict: document.getElementById('verdict'),
 		btnCorrect: document.getElementById('btn-correct'),
 		btnIncorrect: document.getElementById('btn-incorrect'),
@@ -36,14 +54,57 @@
 	};
 
 	var state = {
+		mode: 'medium',
 		words: [],
-		pool: [],
+		deck: [],
 		current: null,
-		askThai: true,
+		/** The current word still counts towards "words left" until it is resolved. */
+		pending: false,
+		cardMode: 'show-english',
 		revealed: false,
+		wasCorrect: false,
+		gaveUp: false,
+		build: null,
 		correct: 0,
 		incorrect: 0
 	};
+
+	/* ---------- Thai script ---------- */
+
+	/**
+	 * True for marks that take no width of their own — vowel signs above and below,
+	 * tone marks, thanthakhat. They sit on top of the preceding letter rather than
+	 * occupying a square of their own.
+	 */
+	function isCombining(ch) {
+		var code = ch.charCodeAt(0);
+		return code === 0x0E31 || (code >= 0x0E34 && code <= 0x0E3A) || (code >= 0x0E47 && code <= 0x0E4E);
+	}
+
+	/** Splits a word into squares: every spacing character starts one, marks join the previous. */
+	function decompose(word) {
+		var groups = [];
+		Array.from(word).forEach(function (ch) {
+			if (isCombining(ch) && groups.length) {
+				groups[groups.length - 1].push(ch);
+			}
+			else {
+				groups.push([ch]);
+			}
+		});
+		return groups;
+	}
+
+	/** Marks within one square may be placed in any order, so compare them as a set. */
+	function squareKey(chars) {
+		return chars.slice().sort().join('');
+	}
+
+	function canBuild(word) {
+		return !/\s/.test(word.thai) && decompose(word.thai).length > 0;
+	}
+
+	/* ---------- helpers ---------- */
 
 	function shuffle(items) {
 		var shuffled = items.slice();
@@ -65,11 +126,14 @@
 		el.cardScreen.hidden = screen !== el.cardScreen;
 		el.resultsScreen.hidden = screen !== el.resultsScreen;
 		el.errorScreen.hidden = screen !== el.errorScreen;
+		if (screen !== el.cardScreen) {
+			document.body.classList.remove('is-building');
+		}
 	}
 
 	function updateScoreboard() {
 		var total = state.words.length;
-		var remaining = state.pool.length + (state.current ? 1 : 0);
+		var remaining = state.deck.length + (state.pending ? 1 : 0);
 		el.statCorrect.textContent = state.correct;
 		el.statIncorrect.textContent = state.incorrect;
 		el.statRemaining.textContent = remaining;
@@ -77,71 +141,266 @@
 		el.progressBar.style.width = total ? ((total - remaining) / total * 100) + '%' : '0%';
 	}
 
+	/* ---------- session ---------- */
+
 	function startSession() {
-		state.pool = shuffle(state.words);
+		state.deck = shuffle(state.words);
 		state.current = null;
+		state.pending = false;
 		state.correct = 0;
 		state.incorrect = 0;
 		showScreen(el.cardScreen);
 		nextCard();
 	}
 
+	function pickCardMode(word) {
+		var modes = CARD_MODES[state.mode] || CARD_MODES.easy;
+		var picked = modes[Math.floor(Math.random() * modes.length)];
+		return picked === 'build-thai' && !canBuild(word) ? 'show-english' : picked;
+	}
+
 	function nextCard() {
-		if (!state.pool.length) {
+		if (!state.deck.length) {
 			state.current = null;
+			state.pending = false;
 			updateScoreboard();
 			showResults();
 			return;
 		}
-		state.current = state.pool.shift();
-		state.askThai = Math.random() < 0.5;
+		state.current = state.deck.shift();
+		state.pending = true;
+		state.cardMode = pickCardMode(state.current);
 		state.revealed = false;
+		state.gaveUp = false;
+		state.build = state.cardMode === 'build-thai' ? createBuild(state.current.thai) : null;
 		render();
 		updateScoreboard();
 	}
 
-	function render() {
-		var word = state.current;
-
-		setText(el.questionThai, state.askThai ? word.thai : '');
-		setText(el.questionTranscription, state.askThai ? word.transcription : '');
-		setText(el.questionEnglish, state.askThai ? '' : word.english);
-
-		setText(el.answerThai, state.askThai ? '' : word.thai);
-		setText(el.answerTranscription, state.askThai ? '' : word.transcription);
-		setText(el.answerEnglish, state.askThai ? word.english : '');
-
-		el.answer.hidden = !state.revealed;
-		el.btnShow.hidden = state.revealed;
-		el.verdict.hidden = !state.revealed;
-		el.hint.textContent = state.revealed
-			? '← Incorrect · Correct →'
-			: 'Space — show answer';
-	}
-
-	function reveal() {
-		if (state.revealed || !state.current) {
-			return;
-		}
-		state.revealed = true;
-		render();
-	}
-
-	function answer(isCorrect) {
-		if (!state.revealed || !state.current) {
-			return;
-		}
+	/** Books the answer, but leaves the card on screen — advance() moves on. */
+	function resolve(isCorrect) {
+		state.wasCorrect = isCorrect;
+		state.pending = false;
 		if (isCorrect) {
 			state.correct++;
 		}
 		else {
 			state.incorrect++;
 			// Put the word back into the session, but not right away.
-			var earliest = Math.min(2, state.pool.length);
-			var position = earliest + Math.floor(Math.random() * (state.pool.length - earliest + 1));
-			state.pool.splice(position, 0, state.current);
+			var earliest = Math.min(2, state.deck.length);
+			var position = earliest + Math.floor(Math.random() * (state.deck.length - earliest + 1));
+			state.deck.splice(position, 0, state.current);
+		}
+		updateScoreboard();
+	}
+
+	/* ---------- the letter builder ---------- */
+
+	function createBuild(thai) {
+		var squares = decompose(thai);
+		var tiles = shuffle(Array.from(thai).map(function (ch, index) {
+			return { id: index, ch: ch, combining: isCombining(ch) };
+		})).map(function (tile, order) {
+			tile.order = order;
+			return tile;
+		});
+		return {
+			slots: squares.map(function () { return []; }),
+			target: squares.map(squareKey).join('|'),
+			tiles: tiles,
+			cursor: null
+		};
+	}
+
+	function isAssembled() {
+		return state.build !== null && state.build.tiles.length === 0;
+	}
+
+	function slotChars(slot) {
+		return slot.map(function (tile) { return tile.ch; });
+	}
+
+	function isAssemblyCorrect() {
+		return state.build.slots.map(function (slot) {
+			return squareKey(slotChars(slot));
+		}).join('|') === state.build.target;
+	}
+
+	/** Restarts a CSS animation that may already have played on this element. */
+	function replayAnimation(node, className) {
+		node.classList.remove(className);
+		void node.offsetWidth;
+		node.classList.add(className);
+	}
+
+	function reject(node) {
+		replayAnimation(node, 'shake');
+	}
+
+	function placeTile(tile, node) {
+		var build = state.build;
+		if (tile.combining) {
+			// Marks have no square of their own; they land on the letter placed last.
+			if (build.cursor === null || !build.slots[build.cursor].length) {
+				reject(node);
+				return;
+			}
+			build.slots[build.cursor].push(tile);
+		}
+		else {
+			var target = build.slots.findIndex(function (slot) { return slot.length === 0; });
+			if (target === -1) {
+				reject(node);
+				return;
+			}
+			build.slots[target].push(tile);
+			build.cursor = target;
+		}
+		build.tiles = build.tiles.filter(function (candidate) { return candidate.id !== tile.id; });
+		render();
+	}
+
+	function clearSlot(index) {
+		var build = state.build;
+		if (!build.slots[index].length) {
+			return;
+		}
+		build.tiles = build.tiles.concat(build.slots[index]).sort(function (a, b) { return a.order - b.order; });
+		build.slots[index] = [];
+		render();
+	}
+
+	function renderBuilder() {
+		var build = state.build;
+
+		el.slots.textContent = '';
+		build.slots.forEach(function (slot, index) {
+			var node = document.createElement('button');
+			node.type = 'button';
+			node.className = 'slot' + (slot.length ? ' is-filled' : '');
+			node.textContent = slotChars(slot).join('');
+			node.disabled = !slot.length || state.revealed;
+			node.addEventListener('click', function () { clearSlot(index); });
+			el.slots.appendChild(node);
+		});
+		el.slots.className = 'slots';
+		if (state.revealed) {
+			el.slots.classList.add(state.wasCorrect ? 'is-correct' : 'is-wrong');
+		}
+
+		el.pool.textContent = '';
+		build.tiles.forEach(function (tile) {
+			var node = document.createElement('button');
+			node.type = 'button';
+			node.className = 'tile';
+			node.textContent = tile.combining ? DOTTED_CIRCLE + tile.ch : tile.ch;
+			node.disabled = state.revealed;
+			node.addEventListener('click', function () { placeTile(tile, node); });
+			el.pool.appendChild(node);
+		});
+
+		el.buildVerdict.hidden = !state.revealed;
+		el.buildVerdict.className = 'build-verdict' + (state.wasCorrect ? ' is-correct' : ' is-wrong');
+		el.buildVerdict.textContent = state.wasCorrect ? '✓ Correct' : (state.gaveUp ? '✗ Gave up' : '✗ Not quite');
+	}
+
+	/* ---------- rendering ---------- */
+
+	function hintText() {
+		if (state.revealed) {
+			return state.cardMode === 'build-thai' ? 'Space — next word' : '← Incorrect · Correct →';
+		}
+		if (state.cardMode === 'build-thai' && !isAssembled()) {
+			return 'Tap the letters to spell the word · Esc — give up';
+		}
+		return 'Space — show answer';
+	}
+
+	function render() {
+		var word = state.current;
+		var showThai = state.cardMode === 'show-thai';
+		var building = state.cardMode === 'build-thai';
+
+		setText(el.questionThai, showThai ? word.thai : '');
+		setText(el.questionTranscription, showThai ? word.transcription : '');
+		setText(el.questionEnglish, showThai ? '' : word.english);
+
+		setText(el.answerThai, showThai ? '' : word.thai);
+		setText(el.answerTranscription, showThai ? '' : word.transcription);
+		setText(el.answerEnglish, showThai ? word.english : '');
+
+		el.answer.hidden = !state.revealed;
+		el.builder.hidden = !building;
+		document.body.classList.toggle('is-building', building);
+		if (building) {
+			renderBuilder();
+		}
+
+		el.btnShow.hidden = state.revealed || (building && !isAssembled());
+		el.btnGiveUp.hidden = !building || state.revealed || isAssembled();
+		el.btnNext.hidden = !state.revealed || !building;
+		el.verdict.hidden = !state.revealed || building;
+		el.hint.textContent = hintText();
+	}
+
+	/* ---------- actions ---------- */
+
+	function reveal() {
+		if (state.revealed || !state.current) {
+			return;
+		}
+		if (state.cardMode === 'build-thai') {
+			if (!isAssembled()) {
+				return;
+			}
+			// Nothing to trust the user about here — the spelling grades itself.
+			state.revealed = true;
+			resolve(isAssemblyCorrect());
+			render();
+			// The answer makes the card taller; keep the way forward on screen.
+			el.btnNext.scrollIntoView({ block: 'nearest' });
+			return;
+		}
+		state.revealed = true;
+		render();
+	}
+
+	/** Bails out of a half-built word: counts as a mistake, so the word comes back later. */
+	function giveUp() {
+		if (state.revealed || state.cardMode !== 'build-thai' || isAssembled()) {
+			return;
+		}
+		state.revealed = true;
+		state.gaveUp = true;
+		resolve(false);
+		render();
+		el.btnNext.scrollIntoView({ block: 'nearest' });
+	}
+
+	function answer(isCorrect) {
+		if (!state.revealed || !state.current || state.cardMode === 'build-thai') {
+			return;
+		}
+		resolve(isCorrect);
+		nextCard();
+	}
+
+	function advance() {
+		if (!state.revealed || !state.current) {
+			return;
 		}
 		nextCard();
+	}
+
+	function selectMode(mode) {
+		if (mode === state.mode || !CARD_MODES[mode]) {
+			return;
+		}
+		state.mode = mode;
+		Array.prototype.forEach.call(el.tabs.querySelectorAll('.tab'), function (tab) {
+			tab.classList.toggle('is-active', tab.dataset.mode === mode);
+		});
+		startSession();
 	}
 
 	function showResults() {
@@ -169,24 +428,47 @@
 			}
 			return;
 		}
-		if (!el.cardScreen.hidden) {
-			if (event.key === ' ' || event.key === 'Enter') {
-				event.preventDefault();
+		if (el.cardScreen.hidden) {
+			return;
+		}
+		if (event.key === ' ' || event.key === 'Enter') {
+			event.preventDefault();
+			if (state.revealed) {
+				advance();
+			}
+			else {
 				reveal();
 			}
-			else if (event.key === 'ArrowLeft' || event.key === '1') {
-				answer(false);
-			}
-			else if (event.key === 'ArrowRight' || event.key === '2') {
-				answer(true);
-			}
+		}
+		else if (event.key === 'Escape') {
+			giveUp();
+		}
+		else if (event.key === 'ArrowLeft' || event.key === '1') {
+			answer(false);
+		}
+		else if (event.key === 'ArrowRight' || event.key === '2') {
+			answer(true);
 		}
 	}
 
 	el.btnShow.addEventListener('click', reveal);
+	el.btnGiveUp.addEventListener('click', giveUp);
+	el.btnNext.addEventListener('click', advance);
 	el.btnCorrect.addEventListener('click', function () { answer(true); });
 	el.btnIncorrect.addEventListener('click', function () { answer(false); });
 	el.btnRestart.addEventListener('click', startSession);
+	el.btnReset.addEventListener('click', function () {
+		replayAnimation(el.btnReset, 'is-spinning');
+		if (state.words.length) {
+			startSession();
+		}
+	});
+	el.tabs.addEventListener('click', function (event) {
+		var tab = event.target.closest('.tab');
+		if (tab && !tab.disabled) {
+			selectMode(tab.dataset.mode);
+		}
+	});
 	document.addEventListener('keydown', onKeyDown);
 
 	fetch('/api/words')

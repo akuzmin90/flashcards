@@ -4,6 +4,7 @@
 	--surface: #ffffff;
 	--surface-soft: #f1f5f9;
 	--border: #e2e8f0;
+	--border-strong: #b9c4d4;
 	--text: #0f172a;
 	--muted: #64748b;
 	--blue: #2563eb;
@@ -24,6 +25,7 @@
 		--surface: #1a2436;
 		--surface-soft: #22304a;
 		--border: #2b3a54;
+		--border-strong: #45587a;
 		--text: #e8eefb;
 		--muted: #94a3b8;
 		--blue: #3b82f6;
@@ -51,17 +53,101 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
-/* ---------- scoreboard ---------- */
+/* ---------- top bar ---------- */
 
-.scoreboard {
+.topbar {
 	position: relative;
-	display: flex;
-	justify-content: center;
-	gap: clamp(1.5rem, 6vw, 5rem);
-	padding: 1.25rem 1.5rem 1.5rem;
 	background: var(--surface);
 	border-bottom: 1px solid var(--border);
 	box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+	padding: 1rem 1.5rem 1.5rem;
+}
+
+/* Side columns of equal weight keep the tabs centred whatever the button does. */
+.tabs-row {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.tabs {
+	grid-column: 2;
+	display: flex;
+	justify-content: center;
+	gap: 0.25rem;
+	padding: 0.25rem;
+	background: var(--surface-soft);
+	border-radius: 999px;
+}
+
+.restart {
+	grid-column: 3;
+	justify-self: end;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--surface);
+	color: var(--muted);
+	cursor: pointer;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.restart:hover {
+	color: var(--blue);
+	border-color: var(--blue);
+}
+
+.restart:focus-visible {
+	outline: 3px solid var(--blue);
+	outline-offset: 2px;
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}
+
+.restart.is-spinning svg {
+	animation: spin 0.5s ease-in-out;
+}
+
+.tab {
+	padding: 0.5rem 1.5rem;
+	border: none;
+	border-radius: 999px;
+	background: transparent;
+	font-family: inherit;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: var(--muted);
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tab:hover:not(:disabled):not(.is-active) {
+	color: var(--text);
+}
+
+.tab.is-active {
+	background: var(--surface);
+	color: var(--text);
+	box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.tab:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.scoreboard {
+	display: flex;
+	justify-content: center;
+	gap: clamp(1.5rem, 6vw, 5rem);
 }
 
 .stat {
@@ -142,6 +228,39 @@ main {
 	display: none;
 }
 
+/*
+ * The builder adds two rows of squares to the card, so the same generous spacing
+ * would push the action button below the fold. Tighten everything while it is up.
+ */
+body.is-building main {
+	padding-bottom: 2rem;
+}
+
+body.is-building .screen {
+	gap: 1.5rem;
+}
+
+body.is-building .card {
+	padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+body.is-building .thai {
+	font-size: clamp(2rem, 6vw, 3.25rem);
+}
+
+body.is-building .english {
+	font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+body.is-building .transcription {
+	font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+body.is-building .answer {
+	margin-top: 1.25rem;
+	padding-top: 1.25rem;
+}
+
 /* ---------- card ---------- */
 
 .card {
@@ -195,11 +314,146 @@ main {
 	to { opacity: 1; transform: none; }
 }
 
+/* ---------- letter builder ---------- */
+
+.builder {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+	margin-top: -0.75rem;
+}
+
+.builder[hidden] {
+	display: none;
+}
+
+.slots,
+.pool {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.pool {
+	min-height: 4rem;
+}
+
+.slot,
+.tile {
+	font-family: var(--font-thai);
+	line-height: 1.4;
+	color: var(--text);
+	border-radius: 0.85rem;
+	padding: 0 0.4rem;
+	transition: transform 0.12s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.slot {
+	min-width: 3.75rem;
+	height: 4.5rem;
+	font-size: 2rem;
+	background: transparent;
+	border: 2px dashed var(--border-strong);
+	cursor: default;
+}
+
+.slot.is-filled {
+	background: var(--surface);
+	border-style: solid;
+	border-color: var(--blue);
+	box-shadow: 0 6px 16px rgba(15, 23, 42, 0.10);
+}
+
+.slot.is-filled:not(:disabled) {
+	cursor: pointer;
+}
+
+.slot.is-filled:not(:disabled):hover {
+	border-color: var(--red);
+}
+
+.slots.is-correct .slot.is-filled {
+	border-color: var(--green);
+}
+
+.slots.is-wrong .slot.is-filled {
+	border-color: var(--red);
+}
+
+.tile {
+	min-width: 3.25rem;
+	height: 4rem;
+	font-size: 1.75rem;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+	cursor: pointer;
+}
+
+.tile:not(:disabled):hover {
+	transform: translateY(-3px);
+	border-color: var(--blue);
+}
+
+.tile:not(:disabled):active {
+	transform: translateY(0);
+}
+
+/* Letters left over after giving up: still shown, but plainly out of play. */
+.tile:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+
+.slot:disabled {
+	cursor: default;
+}
+
+.slot:focus-visible,
+.tile:focus-visible {
+	outline: 3px solid var(--blue);
+	outline-offset: 2px;
+}
+
+@keyframes shake {
+	20% { transform: translateX(-5px); }
+	40% { transform: translateX(5px); }
+	60% { transform: translateX(-3px); }
+	80% { transform: translateX(3px); }
+}
+
+.shake {
+	animation: shake 0.3s ease;
+	border-color: var(--red);
+}
+
+.build-verdict {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.build-verdict[hidden] {
+	display: none;
+}
+
+.build-verdict.is-correct {
+	color: var(--green);
+}
+
+.build-verdict.is-wrong {
+	color: var(--red);
+}
+
 /* ---------- buttons ---------- */
 
 .controls {
 	width: 100%;
 	max-width: 34rem;
+	min-height: 4.3rem;
 }
 
 .btn {
@@ -239,6 +493,26 @@ main {
 }
 
 .btn-show[hidden] {
+	display: none;
+}
+
+/* Secondary on purpose — spelling the word out is the point, bailing is the fallback. */
+.btn-giveup {
+	/* Extra breathing room from the letter pool; there is space for it before the answer shows. */
+	margin-top: 1.25rem;
+	background: transparent;
+	color: var(--muted);
+	border: 2px solid var(--border-strong);
+	box-shadow: none;
+	font-size: 1.15rem;
+}
+
+.btn-giveup:hover {
+	color: var(--red);
+	border-color: var(--red);
+}
+
+.btn-giveup[hidden] {
 	display: none;
 }
 
@@ -344,5 +618,9 @@ main {
 
 	.scoreboard {
 		gap: 1.25rem;
+	}
+
+	.tab {
+		padding: 0.5rem 0.9rem;
 	}
 }
