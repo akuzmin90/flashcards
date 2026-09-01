@@ -77,13 +77,33 @@ body {
 }
 
 .tabs {
-	grid-column: 2;
 	display: flex;
 	justify-content: center;
 	gap: 0.25rem;
 	padding: 0.25rem;
 	background: var(--surface-soft);
 	border-radius: 999px;
+}
+
+/* Which trainer you are in — the top-level choice, so it reads a size up. */
+.tabs-apps {
+	grid-column: 2;
+}
+
+.tabs-apps .tab {
+	padding: 0.55rem 1.75rem;
+	font-size: 1.05rem;
+}
+
+/* Which flashcard mode — a setting inside the trainer, so it sits quieter. */
+.tabs-modes {
+	width: fit-content;
+	margin: 0 auto 1rem;
+}
+
+.tabs-modes .tab {
+	padding: 0.45rem 1.25rem;
+	font-size: 0.9rem;
 }
 
 .topbar-actions {
@@ -253,6 +273,10 @@ body {
 	background: var(--surface-soft);
 }
 
+.progress[hidden] {
+	display: none;
+}
+
 .progress-bar {
 	height: 100%;
 	width: 0;
@@ -270,6 +294,17 @@ main {
 	padding: 2rem 1.5rem;
 	/* nudges the card slightly above the vertical centre */
 	padding-bottom: clamp(4rem, 14vh, 10rem);
+}
+
+.app-root {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.app-root[hidden] {
+	display: none;
 }
 
 .screen {
@@ -655,6 +690,148 @@ body.is-compact .answer {
 	color: var(--muted);
 }
 
+/* ---------- tone trainer ---------- */
+
+.tones-card {
+	padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.syllable {
+	font-family: var(--font-thai);
+	font-size: clamp(3.5rem, 13vw, 7rem);
+	line-height: 1.45;
+	font-weight: 600;
+}
+
+/* Waiting on the generator — rare, and only after answering faster than the network. */
+.syllable.is-waiting {
+	color: var(--muted);
+}
+
+.tone-grid {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 0.75rem;
+}
+
+.tone-btn {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 1rem 0.5rem 0.85rem;
+	font-family: inherit;
+	color: var(--text);
+	background: var(--surface);
+	border: 2px solid var(--border);
+	border-radius: 1rem;
+	box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+	cursor: pointer;
+	transition: transform 0.12s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.tone-btn svg {
+	width: 100%;
+	max-width: 4rem;
+	height: auto;
+	color: var(--blue);
+}
+
+.tone-label {
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+
+/* The number that picks this tone from the keyboard. */
+.tone-key {
+	position: absolute;
+	top: 0.4rem;
+	right: 0.55rem;
+	font-size: 0.7rem;
+	font-weight: 700;
+	color: var(--muted);
+}
+
+.tone-btn:not(:disabled):hover {
+	transform: translateY(-3px);
+	border-color: var(--blue);
+}
+
+.tone-btn:focus-visible {
+	outline: 3px solid var(--blue);
+	outline-offset: 2px;
+}
+
+.tone-btn:disabled {
+	cursor: default;
+}
+
+/* After answering: the right tone in green, the one that was picked wrongly in red. */
+.tone-btn.is-correct {
+	border-color: var(--green);
+	color: var(--green);
+}
+
+.tone-btn.is-correct svg {
+	color: var(--green);
+}
+
+.tone-btn.is-wrong {
+	border-color: var(--red);
+	color: var(--red);
+}
+
+.tone-btn.is-wrong svg {
+	color: var(--red);
+}
+
+.tone-btn:disabled:not(.is-correct):not(.is-wrong) {
+	opacity: 0.45;
+}
+
+.tone-result {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.75rem;
+	animation: reveal 0.22s ease-out;
+}
+
+.tone-result[hidden] {
+	display: none;
+}
+
+.tone-rule {
+	margin: 0;
+	font-size: clamp(1.15rem, 3vw, 1.6rem);
+	font-weight: 600;
+	text-align: center;
+}
+
+.tone-chips {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.4rem;
+}
+
+.chip {
+	padding: 0.3rem 0.75rem;
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--muted);
+	background: var(--surface-soft);
+	border-radius: 999px;
+}
+
+@media (max-width: 34rem) {
+	.tone-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
 /* ---------- results ---------- */
 
 .results-title {
@@ -727,7 +904,33 @@ body.is-compact .answer {
 		gap: 1.25rem;
 	}
 
-	.tab {
-		padding: 0.5rem 0.9rem;
+	/* Both tab rows plus the two icon buttons have to share a narrow header. */
+	.topbar {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
+
+	/*
+	 * There is no room left to centre the tabs between equal side columns, so lay the row
+	 * out end to end instead — that keeps a real gap between the tabs and the buttons.
+	 */
+	.tabs-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.tab,
+	.tabs-apps .tab {
+		padding: 0.5rem 0.85rem;
+	}
+
+	.tabs-apps .tab {
+		font-size: 0.95rem;
+	}
+
+	.tabs-modes .tab {
+		padding: 0.45rem 0.8rem;
 	}
 }

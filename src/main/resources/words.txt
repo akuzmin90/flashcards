@@ -1,65 +1,65 @@
 # Format: thai=transcription=english
 # Lines starting with # and empty lines are ignored.
-ตั้ง=dtâng=[to] set ; set up ; establish
-เอียง=iiang=[to be] tilted ; inclined
-จิ๋ว=jĭw=midget ; miniature ; very small
-วิญญาณ=win-yaan=soul ; spirit
-ทั่วไป=tûua bpai=in general ; all over ; generally
-อุปกรณ์=ù-bpà-gon=tool ; instrument ; apparatus
-ผจญภัย=pà-jon pai=[to] have an adventure ; encounter ; face danger
-เห็นดีเห็นงาม=hĕn dee hĕn ngaam=[to] agree ; consent ; assent
-พื้นฐาน=péun tăan=primary ; fundamental
-เกียรติ=gìiat=honor
-อวัยวะเพศ=à-wai-wá pêt=sexual organ
-องคชาต=ong-ká-châat=penis ; genitals
-เหมาะ=mòr=[to be] suitable ; appropriate
-คลุ้มคลั่ง=klúm klâng=mad ; insane ; crazy
-นินทา=nin-taa=[to] gossip
-บุก=bùk=[to] trespass ; invade ; attack
-ตามล่า=dtaam lâa=[to] hunt down
-ตรงไปตรงมา=dtrong bpai dtrong maa=frankly ; straightforwardly ; openly
-อบอุ่น=òp ùn=[to be] warm ; genial ; friendly
-ล้อม=lóm=[to] besiege ; surround ; encircle
-# กินใจ=gin jai=[to be] moving ; profound ; deep
-# มิตรภาพ=mít-dtrà-pâap=friendship ; friendliness ; cordiality
-# แด่=dàe=to ; for
-# เพื่อนซี้=pêuuan sée=close friend ; bosom friend ; intimate friend
-# หลุมดำ=lŭm dam=black hole
-# รอด=rôt=[to] survive ; escape from death ; save
-# ลบ=lóp=[to] remove ; delete ; take away
-# ชัดเจน=chát jen=clearly ; distinctly ; obviously
-# ประนีประนอม=bprà-nee-bprà-nom=[to] compromise ; come to terms with ; reconcile
-# ความหลัง=kwaam lăng=past ; background
-# สนับสนุน=sà-nàp-sà-nŭn=[to] support ; aid ; give support to
-# โฆษณา=kôht-sà-naa=[to] advertise ; publicize ; announce
-# อวกาศ=à-wá-gàat=space
-# ต่อสู้=dtòr sôo=[to] fight ; battle ; struggle
-# กระรอก=grà-rôk=squirrel
-# เลิศ=lêrt=[to be] excellent ; first-rate ; perfect
-# วัฒนธรรม=wát-tá-ná-tam=culture ; civilization ; way of life
-# ขึ้นอยู่กับ=kêun yòo gàp=[to] depend on ; hinge on ; be decided by
-# บริบท=bor-rí-bòt=context
-# ผสมพันธุ์=pà-sŏm pan=[to] breed
-# ผูก=pòok=[to] attach ; bind ; tie
-# ห่าง=hàang=[to be] far away ; distant
-# บัตรเชิญ=bàt chern=invitation
-# หงุดหงิด=ngùt-ngìt=[to be] moody
-# ไปรษณีย์=bprai-sà-nee=post ; mail
-# พัฒนาการ=pát-tá-naa gaan=development ; growth ; progress
-# คลี่คลาย=klêe klaai=[to] ease up ; improve ; become better
-# สวะ=sà-wà=floating weeds ; Java weed ; floating rubbish
-# เวท=wêt=incantation ; magic ; sorcery
-# แค้น=káen=[to be] angry ; [to be] furious ; rankle
-# ศัตรู=sàt-dtroo=enemy ; foe ; opponent
-# ออกจะ=òk jà=rather ; somewhat
-# เห็นแก่ตัว=hĕn gàe dtuua=[to be] selfish ; greedy
-# ประหม่า=bprà-màa=[to] lose self-confidence
-# เจ๋ง=jĕng=[to be] great ; cool ; smart
-# จังหวะ=jang-wà=rhythm ; beat
-# ลาก=lâak=[to] drag
-# เท่=tây=[to be] stylish ; [to be] smart ; [to be] cool
-# ขา=kăa=leg ; limb ; foot
-# เชื่อมโยง=chêuuam yohng=link
+# ตั้ง=dtâng=[to] set ; set up ; establish
+# เอียง=iiang=[to be] tilted ; inclined
+# จิ๋ว=jĭw=midget ; miniature ; very small
+# วิญญาณ=win-yaan=soul ; spirit
+# ทั่วไป=tûua bpai=in general ; all over ; generally
+# อุปกรณ์=ù-bpà-gon=tool ; instrument ; apparatus
+# ผจญภัย=pà-jon pai=[to] have an adventure ; encounter ; face danger
+# เห็นดีเห็นงาม=hĕn dee hĕn ngaam=[to] agree ; consent ; assent
+# พื้นฐาน=péun tăan=primary ; fundamental
+# เกียรติ=gìiat=honor
+# อวัยวะเพศ=à-wai-wá pêt=sexual organ
+# องคชาต=ong-ká-châat=penis ; genitals
+# เหมาะ=mòr=[to be] suitable ; appropriate
+# คลุ้มคลั่ง=klúm klâng=mad ; insane ; crazy
+# นินทา=nin-taa=[to] gossip
+# บุก=bùk=[to] trespass ; invade ; attack
+# ตามล่า=dtaam lâa=[to] hunt down
+# ตรงไปตรงมา=dtrong bpai dtrong maa=frankly ; straightforwardly ; openly
+# อบอุ่น=òp ùn=[to be] warm ; genial ; friendly
+# ล้อม=lóm=[to] besiege ; surround ; encircle
+กินใจ=gin jai=[to be] moving ; profound ; deep
+มิตรภาพ=mít-dtrà-pâap=friendship ; friendliness ; cordiality
+แด่=dàe=to ; for
+เพื่อนซี้=pêuuan sée=close friend ; bosom friend ; intimate friend
+หลุมดำ=lŭm dam=black hole
+รอด=rôt=[to] survive ; escape from death ; save
+ลบ=lóp=[to] remove ; delete ; take away
+ชัดเจน=chát jen=clearly ; distinctly ; obviously
+ประนีประนอม=bprà-nee-bprà-nom=[to] compromise ; come to terms with ; reconcile
+ความหลัง=kwaam lăng=past ; background
+สนับสนุน=sà-nàp-sà-nŭn=[to] support ; aid ; give support to
+โฆษณา=kôht-sà-naa=[to] advertise ; publicize ; announce
+อวกาศ=à-wá-gàat=space
+ต่อสู้=dtòr sôo=[to] fight ; battle ; struggle
+กระรอก=grà-rôk=squirrel
+เลิศ=lêrt=[to be] excellent ; first-rate ; perfect
+วัฒนธรรม=wát-tá-ná-tam=culture ; civilization ; way of life
+ขึ้นอยู่กับ=kêun yòo gàp=[to] depend on ; hinge on ; be decided by
+บริบท=bor-rí-bòt=context
+ผสมพันธุ์=pà-sŏm pan=[to] breed
+ผูก=pòok=[to] attach ; bind ; tie
+ห่าง=hàang=[to be] far away ; distant
+บัตรเชิญ=bàt chern=invitation
+หงุดหงิด=ngùt-ngìt=[to be] moody
+ไปรษณีย์=bprai-sà-nee=post ; mail
+พัฒนาการ=pát-tá-naa gaan=development ; growth ; progress
+คลี่คลาย=klêe klaai=[to] ease up ; improve ; become better
+สวะ=sà-wà=floating weeds ; Java weed ; floating rubbish
+เวท=wêt=incantation ; magic ; sorcery
+แค้น=káen=[to be] angry ; [to be] furious ; rankle
+ศัตรู=sàt-dtroo=enemy ; foe ; opponent
+ออกจะ=òk jà=rather ; somewhat
+เห็นแก่ตัว=hĕn gàe dtuua=[to be] selfish ; greedy
+ประหม่า=bprà-màa=[to] lose self-confidence
+เจ๋ง=jĕng=[to be] great ; cool ; smart
+จังหวะ=jang-wà=rhythm ; beat
+ลาก=lâak=[to] drag
+เท่=tây=[to be] stylish ; [to be] smart ; [to be] cool
+ขา=kăa=leg ; limb ; foot
+เชื่อมโยง=chêuuam yohng=link
 # ประกาศ=bprà-gàat=[to] announce ; notify ; declare
 # ชม=chom=[to] see ; watch ; look
 # ชะมัด=chá-mát=extremely ; terribly ; awfully
