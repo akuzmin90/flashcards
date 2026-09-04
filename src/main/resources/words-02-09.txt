@@ -1,0 +1,26 @@
+# Format: thai=transcription=english
+# Lines starting with # and empty lines are ignored.
+# S02 E09
+แก่=gàe=[to be] old ; elderly
+เง่า=ngâo=stupid
+ช่างหัว=châang hŭua=Who cares
+โหดร้าย=hòht ráai=cruel ; pitiless ; brutal
+ประชาชน=bprà-chaa chon=people ; inhabitants ; residents
+โยน=yohn=[to] throw ; pitch ; toss
+เครื่องเงิน=krêuuang ngern=silverware
+ก้น=gôn=bottom ; buttocks ; ass
+รู=roo=hole
+ตับ=dtàp=liver
+พยุง=pá-yung=[to] support ; help ; assist
+ประชด=bprà-chót=[to be] sarcastic ; speak sarcastically
+ขู่=kòo=[to] intimidate ; threaten ; menace
+เชิดชู=chêrt choo=[to] praise ; glorify ; exalt
+เดา=dao=[to] guess ; estimate ; surmise
+ชั่วร้าย=chûua ráai=[to] wicked ; bad ; low
+ปล้น=bplôn=[to] rob ; plunder ; pillage
+สันติ=săn-dtì=peacefulness ; tranquility ; calmness
+อาชญากร=àat-yaa-gon=criminal ; felon ; offender
+สังคม=săng-kom=society ; community
+เทศกาล=têt-sà-gaan=festival ; festival season ; feast
+แห่ง=hàeng=of
+เหตุการณ์=hèt gaan=event ; incident ; episode
