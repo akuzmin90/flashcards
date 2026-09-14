@@ -14,8 +14,12 @@ const CARD_MODES = {
 /** Card modes with an objectively right answer — no need to ask the user how they did. */
 const AUTO_GRADED = ['build-thai', 'type-thai'];
 
+/** Deck picked on load when the words directory has one by this name. */
+const DEFAULT_DECK = 'words';
+
 const el = {
 	tabs: document.getElementById('tabs'),
+	deckTabs: document.getElementById('deck-tabs'),
 
 	cardScreen: document.getElementById('card-screen'),
 	resultsScreen: document.getElementById('results-screen'),
@@ -63,6 +67,8 @@ const el = {
 
 const state = {
 	mode: 'medium',
+	decks: [],
+	deckName: null,
 	words: [],
 	deck: [],
 	current: null,
@@ -486,6 +492,34 @@ function selectMode(mode) {
 	startSession();
 }
 
+/* ---------- decks ---------- */
+
+function renderDeckTabs() {
+	el.deckTabs.textContent = '';
+	state.decks.forEach((deck) => {
+		const tab = document.createElement('button');
+		tab.type = 'button';
+		tab.className = 'tab' + (deck.name === state.deckName ? ' is-active' : '');
+		tab.dataset.deck = deck.name;
+		tab.textContent = deck.name;
+		tab.title = deck.name + ' - ' + deck.words.length + ' words';
+		el.deckTabs.appendChild(tab);
+	});
+	// With a single deck there is nothing to choose between.
+	el.deckTabs.hidden = state.decks.length < 2;
+}
+
+function selectDeck(name) {
+	const deck = state.decks.find((candidate) => candidate.name === name);
+	if (!deck || name === state.deckName) {
+		return;
+	}
+	state.deckName = deck.name;
+	state.words = deck.words;
+	renderDeckTabs();
+	startSession();
+}
+
 function showResults() {
 	const answers = state.correct + state.incorrect;
 	const accuracy = answers ? Math.round(state.correct / answers * 100) : 0;
@@ -589,25 +623,35 @@ export function init() {
 			selectMode(tab.dataset.mode);
 		}
 	});
+	el.deckTabs.addEventListener('click', (event) => {
+		const tab = event.target.closest('.tab');
+		if (tab && !tab.disabled) {
+			selectDeck(tab.dataset.deck);
+		}
+	});
 	onVoicesChanged(() => {
 		if (state.current) {
 			render();
 		}
 	});
 
-	return fetch('/api/words')
+	return fetch('/api/decks')
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error('HTTP ' + response.status);
 			}
 			return response.json();
 		})
-		.then((words) => {
-			state.words = words;
-			if (!words.length) {
-				showError('The vocabulary file is empty. Add lines like "แด่=dàe=to ; for" to words.txt.');
+		.then((decks) => {
+			state.decks = decks;
+			if (!decks.length) {
+				showError('No decks found. Put files like "แด่=dàe=to ; for" into the words directory.');
 				return;
 			}
+			const preferred = decks.find((deck) => deck.name === DEFAULT_DECK) || decks[0];
+			state.deckName = preferred.name;
+			state.words = preferred.words;
+			renderDeckTabs();
 			startSession();
 		})
 		.catch((error) => {

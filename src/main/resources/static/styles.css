@@ -95,6 +95,44 @@ body {
 	font-size: 1.05rem;
 }
 
+.tabs[hidden] {
+	display: none;
+}
+
+/*
+ * Which deck — a choice of content rather than a switch, and there can be many, so these
+ * are wrapping chips instead of a third identical pill bar.
+ */
+.tabs-decks {
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	max-width: 100%;
+	margin: 0 auto 0.75rem;
+	padding: 0;
+	background: none;
+}
+
+.tabs-decks .tab {
+	padding: 0.35rem 0.9rem;
+	font-size: 0.85rem;
+	color: var(--muted);
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+}
+
+.tabs-decks .tab:hover:not(.is-active) {
+	color: var(--text);
+	border-color: var(--blue);
+}
+
+.tabs-decks .tab.is-active {
+	color: #fff;
+	background: var(--blue);
+	border-color: var(--blue);
+	box-shadow: none;
+}
+
 /* Which flashcard mode — a setting inside the trainer, so it sits quieter. */
 .tabs-modes {
 	width: fit-content;

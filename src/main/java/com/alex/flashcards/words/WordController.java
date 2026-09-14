@@ -22,9 +22,9 @@ public class WordController {
 		this.wordService = wordService;
 	}
 
-	@GetMapping("/words")
-	public List<Word> words() {
-		return wordService.getWords();
+	@GetMapping("/decks")
+	public List<Deck> decks() {
+		return wordService.getDecks();
 	}
 
 	/**
