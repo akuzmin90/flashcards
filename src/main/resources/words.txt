@@ -1,40 +1,48 @@
-บังอาจ=bang àat=[to] have the nerve to ; have the audacity to
-สมบูรณ์=sŏm-boon=[to be] perfect ; complete ; whole
-แหม=măe=oh!
-เนอะ=núh=right?
-กรี๊ด=gréet=[to] scream
-กำจัด=gam-jàt=[to] eradicate ; eliminate ; get rid of
-พิสูจน์=pí-sòot=[to] prove ; verify ; demonstrate
-แล้วไหนจะ=láew năi jà=And what about...?
-คลุมเครือ=klum kreuua=нечеткий
-ประจำ=bprà-jam=[to be] regular ; usual ; fixed
-เพียบ=pîiap=numerously ; very many ; copiously
-มั่วๆ=mûua mûua=at random ; haphazardly
-ติดปาก=dtìt bpàak=[to be] popular ; favorite ; hit
-สู่=sòo=to ; toward ; into
-หนทาง=hŏn taang=way ; path ; course
-จอม=jom=top ; highest point ; peak
-นับไม่ถ้วน=náp mâi tûuan=infinitely ; innumerably ; incalculably
-ปลอบ=bplòp=[to] soothe ; comfort ; console
-ตั้งสติ=dtâng sà-dtì=calm down
-หลุด=lùt=[to] slip out ; fall off ; become detached
-ติดเชื้อ=dtìt chéuua=[to] infect with ; catch ; contract a disease
-ตัวละคร=dtuua lá-kon=character ; player
-อย่างกับ=yàang gàp=like ; as ; such as ; as if
-สรรเสริญ=săn-sĕrn=[to] praise ; admire ; laud
-เล็ง=leng=[to] aim at ; point ; level
-ชิน=chin=[to] be used to ; [to be] familiar with
-ชั้นดี=chán dee=first-class ; first-rate ; top grade
-หลักฐาน=làk tăan=evidence ; proof
-ดินสอ=din-sŏr=pencil
-วันวาน=wan waan=yesterday ; day before today
-ย้อน=yón=[to] return ; come back ; turn back
-ทบทวน=tóp tuuan=[to] reconsider ; review
-ไหล่=lài=shoulder
-สำนวน=săm-nuuan=idiom ; phrase ; expression
-สูด=sòot=[to] inhale ; sniff ; nose
-เคียงข้าง=kiiang kâang=[to be] next to
-ชก=chók=[to] box ; punch ; pummel
-โผล่=plòh=[to] emerge ; appear
-ความทรงจำ=kwaam song jam=memory ; remembrance ; commemoration
-จ้าง=jâang=[to] employ ; hire
+ข้างหลัง=kâang lăng=behind
+ลู่วิ่ง=lôo wîng=Беговая дорожка
+ใหม่ล่าสุด=mài lâa sùt=Последний,Brand new
+ทำตาม=tam dtaam=follow lead,(делай, как говорю)
+ชื่อดัง=chêu dang=famous,well-known,celebrated
+แนวโน้ม=naew nóhm=tendency
+ประหม่า=bprà-màa=to lose self-confidence
+โด่=dòh=to stand erect,stand high
+ทาย=taai=to guess,conjecture
+ต้ม=dtôm=to boil, boiled
+ชดใช้=chót-chái=to compensate,pay
+คิดค้น=kít kón=to invent,create,make
+หลง=lŏng=to be lost,get lost,be misguided
+หลงประเด็น=lŏng bprà-den=miss the point
+ประเด็น=bprà-den=point,issue
+เถียง=tĭiang=to dispute,debate,argue
+เป้าหมาย=bpâo măai=aim,purpose,goal
+คำสั่ง=kam sàng=command,order
+จัดหา=jàt hăa=to provide
+กลักพา=glàk paa=kidnap
+เคย=koiie=once,ever,used to
+ค่อย=kôi=постепенно
+ไม่ค่อย=mâi kôi=not really,not especially
+คอย=koi=to wait,await
+ลูกเขย=lôok kŏiie=son-in-law
+นรก=ná-rók=hell,underworld
+เสมือน=sà-mĕuuan=Virtual
+รู้ตัว=róo dtuua=to be aware of
+เดี๋ยวค่อยดูกันนะ=dĭieow kôi doo gan ná=Посмотрим, посмотрим
+ไว้ค่อยจัดการ=wái kôi jàt gaan=deal with it later
+ตั้งค่า=dtâng kâa=to set
+กำลัง=gam-lang=power,energy,strength
+สาบาน=săa-baan=to swear,vow,make an oath
+คอยดู=koi doo=watch out for,wait and see
+โป๊เปลือย=bpóh bpleuuay=nude
+ประสบการณ์=bprà-sòp gaan=experience
+ทะเยอทะยาน=tá-yer-tá-yaan=[to be] ambitious,[to be] aspiring
+เฝ้าดู=fâo doo=to watch,look at
+ฝักบัว=fàk buua=shower,ceiling shower
+เชื้อเพลิง=chéuua plerngn=fuel
+นางฟ้า=naang fáa=angel,fairy,goddess
+คูณ=koon=to multiply
+ไงก็=ngai gôr=anyway
+ล้ำ=lám=exceedingly,extremely,very
+ช่างฉลาด=châang chà-làat=How clever
+ดีเกินจริง=dee gern jing=Too good to be true
+ตอบสนอง=dtòp sà-nŏng=to respond,react,reply
+แสง=săeng=light,ray,beam
