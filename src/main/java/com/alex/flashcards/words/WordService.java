@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,6 +37,9 @@ public class WordService {
 	/** Tried in order; the first file named after the Thai word wins. */
 	private static final List<String> AUDIO_EXTENSIONS = List.of(".mp3", ".ogg", ".m4a", ".wav");
 
+	/** Kept at the head of the list, so it is the leftmost tab and the one opened on load. */
+	private static final String DEFAULT_DECK = "words";
+
 	private static final String CLASSPATH_PREFIX = "classpath:";
 
 	private static final String FILE_PREFIX = "file:";
@@ -62,7 +66,6 @@ public class WordService {
 	private List<Deck> load(String wordsDir, Path audioDir, ResourcePatternResolver resolver) {
 		List<Resource> files = listFiles(wordsDir, resolver);
 
-		// Sorted by the name shown on the tab, so "words" leads the plainer "words-..." files.
 		List<Map.Entry<String, Resource>> named = new ArrayList<>();
 		for (Resource file : files) {
 			String name = deckName(file);
@@ -70,7 +73,10 @@ public class WordService {
 				named.add(Map.entry(name, file));
 			}
 		}
-		named.sort(Map.Entry.comparingByKey());
+		// The default deck first, everything else alphabetically after it.
+		named.sort(Comparator
+				.comparing((Map.Entry<String, Resource> entry) -> !DEFAULT_DECK.equals(entry.getKey()))
+				.thenComparing(Map.Entry::getKey));
 
 		List<Deck> loaded = new ArrayList<>();
 		int withAudio = 0;

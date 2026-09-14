@@ -14,9 +14,6 @@ const CARD_MODES = {
 /** Card modes with an objectively right answer — no need to ask the user how they did. */
 const AUTO_GRADED = ['build-thai', 'type-thai'];
 
-/** Deck picked on load when the words directory has one by this name. */
-const DEFAULT_DECK = 'words';
-
 const el = {
 	tabs: document.getElementById('tabs'),
 	deckTabs: document.getElementById('deck-tabs'),
@@ -648,9 +645,9 @@ export function init() {
 				showError('No decks found. Put files like "แด่=dàe=to ; for" into the words directory.');
 				return;
 			}
-			const preferred = decks.find((deck) => deck.name === DEFAULT_DECK) || decks[0];
-			state.deckName = preferred.name;
-			state.words = preferred.words;
+			// The server puts the default deck first, so the leftmost tab is the one to open.
+			state.deckName = decks[0].name;
+			state.words = decks[0].words;
 			renderDeckTabs();
 			startSession();
 		})
