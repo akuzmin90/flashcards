@@ -1,43 +1,40 @@
-ไม่มีเลย=mâi mii loei=not at all,none whatsoever
-ไม่มีสักนิด=mâi mii sàk nít=not even a little,not at all
-ก็ชีวิตอะนะ=gâw chii-wít à ná=well,that's life
-แต่อีกมุมนึง=dtàe ìik mum nʉng=but on the other hand
-ก็จริงนะ=gâw jing ná=that's true,fair point
-ก็ใช่นะ แต่...=gâw châi ná dtàe...=yeah,but...
-เอาจริง ๆ นะ=ao jing jing ná=honestly,seriously speaking
-พูดตรง ๆ นะ=phûut dtrong dtrong ná=to be honest,let me be direct
-ว่าไปแล้ว=wâa bpai láeo=come to think of it,when you think about it
-คิดอีกที=khít ìik thii=on second thought
-ช่างมันเถอะ=châang man thə̀=forget it,let it go
-เอาเถอะ=ao thə̀=alright then,never mind
-แล้วแต่เลย=láeo dtàe loei=up to you,whatever you want
-ก็แล้วกัน=gâw láeo gan=let's go with that then
-ไม่เป็นไร=mâi bpen rai=it's okay,no problem,never mind
-ยังไงก็=yang-ngai gâw=anyway,no matter what
-ยังไงก็ได้=yang-ngai gâw dâai=anything is fine,whatever
-ไม่รู้เหมือนกัน=mâi rúu mʉ̌an gan=I don't know either,I have no idea
-ใครจะไปรู้=khrai jà bpai rúu=who knows
-มันก็ต้องมีบ้าง=man gâw dtông mii bâang=these things happen,there has to be some
-เป็นธรรมดา=bpen tham-má-daa=it's normal,that's natural
-ก็ประมาณนั้น=gâw bprà-maan nán=more or less,pretty much
-อะไรประมาณนั้น=à-rai bprà-maan nán=something like that
-ไม่ถึงขนาดนั้น=mâi thʉ̌ng khà-nàat nán=not that much,not to that extent
-ก็ไม่ได้แย่นะ=gâw mâi dâai yâe ná=it's not bad actually
-มันก็อีกเรื่องนึง=man gâw ìik rʉ̂ang nʉng=that's another matter
-คนละเรื่องเลย=khon lá rʉ̂ang loei=that's a completely different thing
-ไม่เกี่ยวกันเลย=mâi gìao gan loei=not related at all
-พูดง่าย ๆ คือ=phûut ngâai ngâai khʉʉ=simply put,in other words
-เอาเป็นว่า=ao bpen wâa=anyway,let's just say
-สรุปคือ=sà-rùp khʉʉ=so basically,in conclusion
-เดี๋ยวค่อยว่ากัน=dĭao khôi wâa gan=we'll deal with it later,we'll see later
-ไว้ค่อยคุยกัน=wái khôi khui gan=we'll talk later
-ไว้ค่อยคิด=wái khôi khít=we'll think about it later
-เอาไว้ก่อน=ao wái gòn=leave it for now,put it aside for now
-ไหน ๆ ก็...แล้ว=nǎi nǎi gâw...láeo=since we're already...,now that...
-ถึงยังไง=thʉ̌ng yang-ngai=anyway,regardless
-ก็แค่นั้นเอง=gâw khâe nán eeng=that's all,that's it
-แค่นี้เอง=khâe níi eeng=that's all,just this
-จะว่าไป=jà wâa bpai=come to think of it,actually
-จริง ๆ แล้ว=jing jing láeo=actually,in fact
-สุดท้ายแล้ว=sùt-tháai láeo=in the end,ultimately
-ก็ไม่แน่นะ=gâw mâi nâe ná=maybe,who knows
+ไม่มีสักนิด=mâi mii sàk nít=ни капли,совсем нисколько
+ก็ชีวิตอะนะ=gâw chii-wít à ná=ну,жизнь такая,такова жизнь
+แต่อีกมุมนึง=dtàe ìik mum nʉng=но с другой стороны
+ก็จริงนะ=gâw jing ná=тоже верно,это правда
+ก็ใช่นะ แต่...=gâw châi ná dtàe...=ну да,но...
+เอาจริง ๆ นะ=ao jing jing ná=если честно,если серьёзно
+พูดตรง ๆ นะ=phûut dtrong dtrong ná=скажу прямо,честно говоря
+ช่างมันเถอะ=châang man thə̀=забей,ну его,неважно
+เอาเถอะ=ao thə̀=ну ладно,пусть
+ก็แล้วกัน=gâw láeo gan=ну тогда пусть будет так
+ยังไงก็ได้=yang-ngai gâw dâai=как угодно,мне всё равно
+ใครจะไปรู้=khrai jà bpai rúu=кто его знает,кто знает
+มันก็ต้องมีบ้าง=man gâw dtông mii bâang=ну бывает,без этого никак
+เป็นธรรมดา=bpen tham-má-daa=это нормально,обычное дело
+ก็ประมาณนั้น=gâw bprà-maan nán=ну типа того,примерно так
+อะไรประมาณนั้น=à-rai bprà-maan nán=что-то вроде того,что-то такое
+ไม่ถึงขนาดนั้น=mâi thʉ̌ng khà-nàat nán=не настолько,не до такой степени
+ก็ไม่ได้แย่นะ=gâw mâi dâai yâe ná=вообще-то неплохо,не так уж плохо
+มันก็อีกเรื่องนึง=man gâw ìik rʉ̂ang nʉng=это уже другое дело
+คนละเรื่องเลย=khon lá rʉ̂ang loei=это совсем другое,это разные вещи
+ไม่เกี่ยวกันเลย=mâi gìao gan loei=вообще не связано,не имеет отношения
+เดี๋ยวค่อยว่ากัน=dĭao khôi wâa gan=потом разберёмся,потом решим
+เดี๋ยวค่อยดูกันนะ=dĭieow kôi doo gan ná=Посмотрим, посмотрим
+ไว้ค่อยคุยกัน=wái khôi khui gan=потом поговорим
+ไว้ค่อยจัดการ=wái kôi jàt gaan=deal with it later
+ไว้ค่อยคิด=wái khôi khít=потом подумаем
+เอาไว้ก่อน=ao wái gòn=пока отложим,оставим пока
+ไหน ๆ ก็...แล้ว=nǎi nǎi gâw...láeo=раз уж...,раз уж всё равно...
+ถึงยังไง=thʉ̌ng yang-ngai=как бы то ни было,всё равно
+ยังไงก็=yang-ngai gâw=в любом случае,всё равно
+ก็แค่นั้นเอง=gâw khâe nán eeng=вот и всё,только и всего
+แค่นี้เอง=khâe níi eeng=всего-то,только это
+ก็ไม่แน่นะ=gâw mâi nâe ná=кто знает,не факт
+พูดง่าย ๆ คือ=phûut ngâai ngâai khʉʉ=проще говоря,другими словами
+เอาเป็นว่า=ao bpen wâa=короче,давай так,в общем
+สรุปคือ=sà-rùp khʉʉ=короче говоря,итого
+ว่าไปแล้ว=wâa bpai láeo=если подумать,вообще-то
+จะว่าไป=jà wâa bpai=на самом деле,если подумать,кстати говоря
+คิดอีกที=khít ìik thii=если подумать ещё раз,хотя
+สุดท้ายแล้ว=sùt-tháai láeo=в конечном итоге,в конце концов

@@ -5,9 +5,14 @@ import { canSpeak, isSoundOn, onVoicesChanged, speak, stopSpeaking } from './aud
 /** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
 const DOTTED_CIRCLE = '◌';
 
+/*
+ * Which kinds of card each mode draws from. "to-thai" drops the card that shows the Thai
+ * side, so the word always has to be recalled rather than recognised.
+ */
 const CARD_MODES = {
 	easy: ['show-thai', 'show-english'],
-	medium: ['show-thai', 'show-english', 'build-thai'],
+	letters: ['show-thai', 'show-english', 'build-thai'],
+	'to-thai': ['show-english'],
 	hard: ['show-thai', 'show-english', 'build-thai', 'type-thai']
 };
 
@@ -63,7 +68,7 @@ const el = {
 };
 
 const state = {
-	mode: 'medium',
+	mode: 'easy',
 	decks: [],
 	deckName: null,
 	words: [],
