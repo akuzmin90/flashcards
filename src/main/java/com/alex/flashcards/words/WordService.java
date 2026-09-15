@@ -42,6 +42,9 @@ public class WordService {
 
 	private static final String CLASSPATH_PREFIX = "classpath:";
 
+	/** Where the build copies the decks to, so a packaged artifact carries its own vocabulary. */
+	private static final String BUNDLED_DECKS = "words/";
+
 	private static final String FILE_PREFIX = "file:";
 
 	private final List<Deck> decks;
@@ -107,30 +110,40 @@ public class WordService {
 	}
 
 	/**
-	 * Lists the deck files. A plain path is read straight off disk, so renaming or deleting a
-	 * deck takes effect on the next start; only an explicit {@code classpath:} location goes
-	 * through the build, where stale copies of removed files would linger in {@code target}.
+	 * Lists the deck files.
+	 * <p>
+	 * A plain path is read straight off disk, so renaming or deleting a deck takes effect on
+	 * the next start - no rebuild, and no stale copies left behind in {@code target}. That
+	 * path is relative to the working directory, which is the project root when running
+	 * locally but something else entirely under a standalone servlet container, so the decks
+	 * packaged into the artifact stand in whenever the directory is not there.
 	 */
 	private static List<Resource> listFiles(String wordsDir, ResourcePatternResolver resolver) {
 		if (wordsDir.startsWith(CLASSPATH_PREFIX)) {
-			String pattern = (wordsDir.endsWith("/") ? wordsDir : wordsDir + "/") + "*";
-			try {
-				return List.of(resolver.getResources(pattern));
-			}
-			catch (IOException ex) {
-				throw new IllegalStateException("Cannot list the words directory: " + pattern, ex);
-			}
+			return fromClasspath(wordsDir, resolver);
 		}
 		Path dir = Paths.get(wordsDir.startsWith(FILE_PREFIX) ? wordsDir.substring(FILE_PREFIX.length()) : wordsDir);
 		if (!Files.isDirectory(dir)) {
-			log.warn("Words directory {} does not exist", dir.toAbsolutePath());
-			return List.of();
+			log.info("No words directory at {} - falling back to the decks bundled in the app",
+					dir.toAbsolutePath());
+			return fromClasspath(CLASSPATH_PREFIX + BUNDLED_DECKS, resolver);
 		}
 		try (Stream<Path> entries = Files.list(dir)) {
 			return entries.filter(Files::isRegularFile).map(path -> (Resource) new FileSystemResource(path)).toList();
 		}
 		catch (IOException ex) {
 			throw new IllegalStateException("Cannot list the words directory: " + dir.toAbsolutePath(), ex);
+		}
+	}
+
+	private static List<Resource> fromClasspath(String location, ResourcePatternResolver resolver) {
+		String pattern = (location.endsWith("/") ? location : location + "/") + "*";
+		try {
+			return List.of(resolver.getResources(pattern));
+		}
+		catch (IOException ex) {
+			log.warn("Cannot list {}", pattern, ex);
+			return List.of();
 		}
 	}
 
@@ -176,7 +189,8 @@ public class WordService {
 				}
 			}
 			// The index is global across decks, so one flat list can serve every recording.
-			String url = file == null ? null : "/api/audio/" + recordings.size();
+			// Relative to the app, not to the server root - the app may sit under a context path.
+			String url = file == null ? null : "api/audio/" + recordings.size();
 			recordings.add(file);
 			withAudio.add(new Word(word.thai(), word.transcription(), word.english(), url));
 		}

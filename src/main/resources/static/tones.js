@@ -3,6 +3,7 @@
  * be worked out from the consonant class, the vowel length, the ending and the tone mark.
  */
 
+import { apiUrl } from './api.js';
 import { canSpeak, isSoundOn, onVoicesChanged, speak, stopSpeaking } from './audio.js';
 
 /** Traditional order — สามัญ, เอก, โท, ตรี, จัตวา — with the pitch contour of each. */
@@ -65,7 +66,7 @@ let inflight = null;
 
 function refill() {
 	if (!inflight) {
-		inflight = fetch('/api/tones/next?count=' + BATCH)
+		inflight = fetch(apiUrl('api/tones/next?count=' + BATCH))
 			.then((response) => {
 				if (!response.ok) {
 					throw new Error('HTTP ' + response.status);

@@ -5,6 +5,8 @@
  * With neither available the callers hide their speaker buttons rather than doing nothing.
  */
 
+import { apiUrl } from './api.js';
+
 let enabled = true;
 let voice = null;
 const player = new Audio();
@@ -58,7 +60,8 @@ export function speak(text, audioUrl) {
 	}
 	stopSpeaking();
 	if (audioUrl) {
-		player.src = audioUrl;
+		// The server hands out a path relative to the app, not to the server root.
+		player.src = apiUrl(audioUrl);
 		// Rejects when the browser blocks playback before any user gesture; harmless.
 		const started = player.play();
 		if (started && started.catch) {

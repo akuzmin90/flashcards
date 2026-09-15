@@ -13,3 +13,7 @@ so audio already works with nothing here. Drop files in only to override that
 with real recordings or with a better text-to-speech engine.
 
 Files are picked up at startup, so restart the app after adding any.
+
+This folder is found relative to the working directory, which is the project root when the
+app is run locally. Deployed to a servlet container it is not, so set an absolute path in
+flashcards.audio-dir there - or leave it, and the browser voice takes over.

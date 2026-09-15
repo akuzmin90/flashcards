@@ -54,6 +54,20 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<!--
+				The decks live in a plain folder so they can be edited without a rebuild, but a
+				packaged artifact has to carry them too: deployed to a servlet container the
+				working directory is not the project root, and that folder would not be found.
+			-->
+			<resource>
+				<directory>words</directory>
+				<targetPath>words</targetPath>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

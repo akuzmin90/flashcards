@@ -1,5 +1,6 @@
 /* Vocabulary trainer: three modes, four kinds of card. */
 
+import { apiUrl } from './api.js';
 import { canSpeak, isSoundOn, onVoicesChanged, speak, stopSpeaking } from './audio.js';
 
 /** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
@@ -637,7 +638,7 @@ export function init() {
 		}
 	});
 
-	return fetch('/api/decks')
+	return fetch(apiUrl('api/decks'))
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error('HTTP ' + response.status);
