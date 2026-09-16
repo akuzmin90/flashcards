@@ -981,6 +981,11 @@ body.is-compact .answer {
 		padding: 0.45rem 0.8rem;
 	}
 
+	/* Five modes no longer fit on one line of a phone. */
+	.tabs-modes {
+		flex-wrap: wrap;
+	}
+
 	/*
 	 * A phone screen is mostly header otherwise: the three tab rows and the scoreboard ate
 	 * 44% of it. Tighten every gap in the bar rather than dropping any of the controls.

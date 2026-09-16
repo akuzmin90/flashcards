@@ -1,7 +1,7 @@
 /* Vocabulary trainer: three modes, four kinds of card. */
 
 import { apiUrl } from './api.js';
-import { canSpeak, isSoundOn, onVoicesChanged, speak, stopSpeaking } from './audio.js';
+import { canSpeak, isSoundOn, onVoicesChanged, speak, speakTranslation, stopSpeaking } from './audio.js';
 
 /** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
 const DOTTED_CIRCLE = '◌';
@@ -14,8 +14,16 @@ const CARD_MODES = {
 	easy: ['show-thai', 'show-english'],
 	letters: ['show-thai', 'show-english', 'build-thai'],
 	'to-thai': ['show-english'],
-	hard: ['show-thai', 'show-english', 'build-thai', 'type-thai']
+	hard: ['show-thai', 'show-english', 'build-thai', 'type-thai'],
+	// Hands-free: always the Thai side, read out and then answered by the app itself.
+	auto: ['show-thai']
 };
+
+/** Breath between the translation and the next word. */
+const AUTO_PAUSE_MS = 1300;
+
+/** Each step lasts at least this long, so a muted or voiceless run does not race past. */
+const AUTO_MIN_STEP_MS = 1100;
 
 /** Card modes with an objectively right answer — no need to ask the user how they did. */
 const AUTO_GRADED = ['build-thai', 'type-thai'];
@@ -56,6 +64,7 @@ const el = {
 	btnShow: document.getElementById('btn-show'),
 	btnGiveUp: document.getElementById('btn-giveup'),
 	btnNext: document.getElementById('btn-next'),
+	btnAuto: document.getElementById('btn-auto'),
 	verdict: document.getElementById('verdict'),
 	btnCorrect: document.getElementById('btn-correct'),
 	btnIncorrect: document.getElementById('btn-incorrect'),
@@ -85,6 +94,70 @@ const state = {
 	correct: 0,
 	incorrect: 0
 };
+
+/*
+ * Auto mode runs a sequence of awaits per card, so there is always one in flight. This token
+ * is bumped whenever that run must stop - a new session, a mode or deck change, leaving the
+ * tab, pausing - and every step checks it before continuing. Without it a cancelled run would
+ * talk over its successor and answer a card that is no longer on screen.
+ */
+let autoRun = 0;
+let autoPaused = false;
+
+function isAuto() {
+	return state.mode === 'auto';
+}
+
+function cancelAuto() {
+	autoRun++;
+	stopSpeaking();
+}
+
+function delay(ms) {
+	return new Promise((done) => setTimeout(done, ms));
+}
+
+/** Reads the word, reveals and reads the translation, waits, then marks it known. */
+async function playAutoCard() {
+	const token = ++autoRun;
+	const word = state.current;
+	const running = () => token === autoRun && state.current === word;
+
+	await Promise.all([speak(word.thai, word.audio), delay(AUTO_MIN_STEP_MS)]);
+	if (!running()) {
+		return;
+	}
+
+	state.revealed = true;
+	render();
+	await Promise.all([speakTranslation(word.english), delay(AUTO_MIN_STEP_MS)]);
+	if (!running()) {
+		return;
+	}
+
+	await delay(AUTO_PAUSE_MS);
+	if (!running()) {
+		return;
+	}
+
+	// Nothing is being tested here, so every word counts as known and leaves the session.
+	resolve(true);
+	nextCard();
+}
+
+function toggleAutoPause() {
+	if (!isAuto() || !state.current) {
+		return;
+	}
+	autoPaused = !autoPaused;
+	cancelAuto();
+	if (!autoPaused) {
+		// Resuming replays the current word from the start rather than mid-sentence.
+		state.revealed = false;
+		playAutoCard();
+	}
+	render();
+}
 
 /* ---------- Thai script ---------- */
 
@@ -173,6 +246,8 @@ function updateScoreboard() {
 /* ---------- session ---------- */
 
 function startSession() {
+	cancelAuto();
+	autoPaused = false;
 	state.deck = shuffle(state.words);
 	state.current = null;
 	state.pending = false;
@@ -211,7 +286,12 @@ function nextCard() {
 		el.input.focus();
 	}
 	updateScoreboard();
-	if (state.cardMode === 'show-thai') {
+	if (isAuto()) {
+		if (!autoPaused) {
+			playAutoCard();
+		}
+	}
+	else if (state.cardMode === 'show-thai') {
 		say();
 	}
 	else {
@@ -385,6 +465,9 @@ function renderGrade() {
 /* ---------- rendering ---------- */
 
 function hintText() {
+	if (isAuto()) {
+		return autoPaused ? 'Paused · Space — resume' : 'Playing on its own · Space — pause';
+	}
 	if (state.revealed) {
 		return isAutoGraded() ? 'Space — next word' : '← Incorrect · Correct →';
 	}
@@ -432,11 +515,15 @@ function render() {
 	}
 	renderGrade();
 
+	// Auto mode answers for you, so none of the usual buttons apply - only Pause.
+	const auto = isAuto();
 	el.btnShow.textContent = typing ? 'Check answer' : 'Show answer';
-	el.btnShow.hidden = state.revealed || !ready;
-	el.btnGiveUp.hidden = state.revealed || !isAutoGraded() || ready;
-	el.btnNext.hidden = !state.revealed || !isAutoGraded();
-	el.verdict.hidden = !state.revealed || isAutoGraded();
+	el.btnShow.hidden = auto || state.revealed || !ready;
+	el.btnGiveUp.hidden = auto || state.revealed || !isAutoGraded() || ready;
+	el.btnNext.hidden = auto || !state.revealed || !isAutoGraded();
+	el.verdict.hidden = auto || !state.revealed || isAutoGraded();
+	el.btnAuto.hidden = !auto;
+	el.btnAuto.textContent = autoPaused ? 'Resume' : 'Pause';
 	el.hint.textContent = hintText();
 }
 
@@ -568,6 +655,14 @@ export function handleKey(event) {
 	if (el.cardScreen.hidden) {
 		return;
 	}
+	// Nothing to answer in Auto mode; the only control is pausing it.
+	if (isAuto()) {
+		if (event.key === ' ' || event.key === 'Enter') {
+			event.preventDefault();
+			toggleAutoPause();
+		}
+		return;
+	}
 	// While an answer is being typed the field owns the keyboard — Space is a Thai
 	// letter's neighbour, not a "show answer" shortcut. Only submit and bail stay global.
 	if (event.target === el.input) {
@@ -608,10 +703,16 @@ export function restart() {
 
 export function activate() {
 	render();
+	// Coming back to the tab picks Auto mode up again, from the top of the current word.
+	if (isAuto() && !autoPaused && state.current && !el.cardScreen.hidden) {
+		state.revealed = false;
+		playAutoCard();
+	}
 }
 
 export function deactivate() {
-	stopSpeaking();
+	// Leaving the tab must silence Auto mode, not leave it talking in the background.
+	cancelAuto();
 	document.body.classList.remove('is-compact');
 }
 
@@ -630,6 +731,7 @@ export function init() {
 		}
 	});
 	el.btnNext.addEventListener('click', advance);
+	el.btnAuto.addEventListener('click', toggleAutoPause);
 	el.btnCorrect.addEventListener('click', () => answer(true));
 	el.btnIncorrect.addEventListener('click', () => answer(false));
 	el.btnRestart.addEventListener('click', startSession);
