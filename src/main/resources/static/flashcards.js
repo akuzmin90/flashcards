@@ -205,6 +205,8 @@ function nextCard() {
 	el.input.value = '';
 	el.input.disabled = false;
 	render();
+	// A new card starts from its question, not from wherever the last answer left the page.
+	window.scrollTo({ top: 0 });
 	if (state.cardMode === 'type-thai') {
 		el.input.focus();
 	}
@@ -268,6 +270,17 @@ function slotChars(slot) {
 
 function isAssemblyCorrect() {
 	return state.build.slots.map((slot) => squareKey(slotChars(slot))).join('|') === state.build.target;
+}
+
+/**
+ * Everything worth seeing after an answer - the revealed word, the verdict, the way forward -
+ * sits at the end of the page, and revealing is what makes the page outgrow a short window.
+ * So go to the bottom rather than to any one element: aiming at the button leaves the verdict
+ * hidden under the pinned bar on a phone, and aiming at the verdict leaves the button off
+ * screen on a desktop. A no-op when everything already fits.
+ */
+function scrollOutcomeIntoView() {
+	window.scrollTo({ top: document.documentElement.scrollHeight });
 }
 
 /** Restarts a CSS animation that may already have played on this element. */
@@ -443,8 +456,8 @@ function reveal() {
 		el.input.blur();
 		render();
 		say();
-		// The answer makes the card taller; keep the way forward on screen.
-		el.btnNext.scrollIntoView({ block: 'nearest' });
+		// The answer makes the card taller; keep the outcome on screen.
+		scrollOutcomeIntoView();
 		return;
 	}
 	state.revealed = true;
@@ -453,6 +466,8 @@ function reveal() {
 	if (state.cardMode !== 'show-thai') {
 		say();
 	}
+	// The answer grows the card here too, which can push the buttons past the fold.
+	scrollOutcomeIntoView();
 }
 
 /** Bails out of an unfinished answer: counts as a mistake, so the word comes back later. */
@@ -466,7 +481,7 @@ function giveUp() {
 	el.input.blur();
 	render();
 	say();
-	el.btnNext.scrollIntoView({ block: 'nearest' });
+	scrollOutcomeIntoView();
 }
 
 function answer(isCorrect) {

@@ -50,6 +50,8 @@ svg[hidden] {
 body {
 	margin: 0;
 	min-height: 100vh;
+	/* Mobile Safari's 100vh is the height without its toolbars, so it overshoots the screen. */
+	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;
 	background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
@@ -610,6 +612,13 @@ body.is-compact .answer {
 
 /* ---------- self-graded verdict ---------- */
 
+/* Scrolled to after an answer; keeps them off the very edge of the window. */
+.grade,
+.verdict,
+.tone-result {
+	scroll-margin-bottom: 1.5rem;
+}
+
 .grade {
 	margin: 0;
 	font-size: 1.25rem;
@@ -970,5 +979,90 @@ body.is-compact .answer {
 
 	.tabs-modes .tab {
 		padding: 0.45rem 0.8rem;
+	}
+
+	/*
+	 * A phone screen is mostly header otherwise: the three tab rows and the scoreboard ate
+	 * 44% of it. Tighten every gap in the bar rather than dropping any of the controls.
+	 */
+	.topbar {
+		padding-top: 0.6rem;
+		padding-bottom: 0.9rem;
+	}
+
+	.tabs-row {
+		margin-bottom: 0.5rem;
+	}
+
+	.tabs-decks {
+		margin-bottom: 0.5rem;
+	}
+
+	.tabs-modes {
+		margin-bottom: 0.5rem;
+	}
+
+	.stat-value {
+		font-size: 1.4rem;
+	}
+
+	.stat-label {
+		font-size: 0.68rem;
+	}
+
+	/* Nudging the card above the centre is a desktop nicety; here it is just dead space. */
+	main {
+		padding: 1rem 1rem 0.5rem;
+	}
+
+	.screen {
+		gap: 1.25rem;
+	}
+
+	.thai {
+		font-size: clamp(2.25rem, 11vw, 3.5rem);
+	}
+
+	/* Every hint is about the keyboard, which a phone does not have. */
+	.hint {
+		display: none;
+	}
+
+	/*
+	 * The answer buttons were the whole problem: on a long card they ended up past the
+	 * bottom of the screen, behind the browser bar, and had to be scrolled to every single
+	 * time. Pinned to the bottom they are always under the thumb, and the card scrolls
+	 * behind them.
+	 */
+	.controls {
+		position: sticky;
+		bottom: 0;
+		z-index: 5;
+		min-height: 0;
+		padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+		background: var(--bg-bottom);
+	}
+
+	/* Softens the edge where the card slides under the pinned buttons. */
+	.controls::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 100%;
+		height: 1.25rem;
+		background: linear-gradient(to top, var(--bg-bottom), transparent);
+		pointer-events: none;
+	}
+
+	.btn {
+		font-size: 1.25rem;
+		padding: 0.95rem 1.25rem;
+	}
+
+	/* scrollIntoView knows nothing about the pinned bar, so reserve its height here. */
+	.grade,
+	.tone-result {
+		scroll-margin-bottom: 6rem;
 	}
 }

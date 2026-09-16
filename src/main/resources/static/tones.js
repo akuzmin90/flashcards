@@ -100,6 +100,8 @@ async function nextSyllable() {
 	state.answered = false;
 	stopSpeaking();
 	render();
+	// A new syllable starts from the top, not from wherever the last answer left the page.
+	window.scrollTo({ top: 0 });
 }
 
 function choose(tone) {
@@ -120,7 +122,9 @@ function choose(tone) {
 	}
 	render();
 	say();
-	el.btnNext.scrollIntoView({ block: 'nearest' });
+	// The explanation and the button both appear at the end of the page; go there rather than
+	// to either one, or the other ends up off screen. A no-op when everything already fits.
+	window.scrollTo({ top: document.documentElement.scrollHeight });
 }
 
 function say() {
