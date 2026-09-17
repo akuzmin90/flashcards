@@ -1,27 +1,12 @@
-เผย=pŏiie=to reveal a secret
-ขน=kŏn=hairs
-สินค้า=sĭn káa=product,goods
-ประดิษฐ์=bprà-dìt=to invent,create,make up
-สิ่งใด=sìng dai=anything
-ปรารถนา=bpràat-tà-năa=to desire
-น่าสนใจ=nâa sŏn jai=interesting
-น่าสงสัย=nâa sŏng-săi=suspicious
-เสน่ห์=sà-này=charm
-ต้านทาน=dtâan thaan=to resist
-โกน=gohn=shave
-หนวด=nùuat=mustache
-นวด=nûuat=massage
-ไม่อาจ=mâi àat=Cannot (возвышенное)
-มิอาจ=mí àat=cannot (ультра-возвышенное)
-เติม=dterm=to add,add more,fill
-เต็ม=dtem=full
-เติมเต็ม=dterm dtem=to fulfill,complete
-กิจการ=gìt-jà-gaan=business
-แก่=gàe=old
-เจ้านาย=jâo naai=boss,head,master
-เราหัวอกเดียวกัน=rao hŭua òk diieow gan=We are in the same boat.
-หัวอก=hŭua òk=chest,breast
-ปัญญาอ่อน=bpan-yaa òn=retarded,moronic
-หลัก=làk=foundation,main idea
-ธรรมเนียม=tham-niiam=tradition
-โครงงาน=krohng ngaan=project
+สมควร=sŏm kuuan=deserve
+ยึดหลัก=yéut làk=to stick to principles
+อำนาจ=am-nâat=power
+กลุ่ม=glùm=group
+ตรรกะ=dtàk-gà=logic
+เหยียด=yìiat=презирать
+ถ้างั้น=tâa ngán=in that case
+ตรวจจับ=dtrùuat jàp=to detect
+ข้ามหัว=kâam hŭua=to be disrespectful,идти по головам
+เห็นค้านกับ=hĕn káan gàp=to dissagree with
+ค้าน=káan=to oppose
+เคราะห์=krór=fate,misfortune
