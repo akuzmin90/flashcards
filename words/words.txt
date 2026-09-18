@@ -1,12 +1,13 @@
-ยิ่ง=yîng=extremely,greatly,much
-หด=hòt=to shrink
-ใจกลาง=jai glaang=center,heart,middle
-ตรงข้าม=dtrong kâam=opposite,across from
-แลก=lâek=to exchange,change,swap
-ขู่=kòo=to intimidate,threaten,menace
-คาด=kâat=to expect,anticipate,predict
-วิเศษ=wí-sèt=superb,excellent,splendid
-ลึก=léuk=deep
-ลึกลับ=léuk láp=mysterious
-ค้นพบ=kón póp=Обнаружить
-ปกครอง=bpòk krong=to govern,rule,administer
+งง=ngong=confused
+สุนทรพจน์=sŭn-thon rá pót=speech
+ปลาบปลื้ม=bplàap-bplêum=pleased,glad,рад
+เกียรติ=gìiat=honor
+ผูก=pòok=to attach,bind,tie
+มิตร=mítfriend,ally,companion
+โยน=yohn=to throw
+ทุน=tun=capital,asset,fund
+แข็งแกร่ง=kăeng gràeng=strong,mighty
+ยุติธรรม=yút-dtì tam=fair
+ขาด=kàat=to lack,need,miss
+ขุด=kùt=to dig,excavate,unearth
+เตือน=dteuuan=to remind,warn,advise
