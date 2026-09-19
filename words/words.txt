@@ -1,13 +1,5 @@
-งง=ngong=confused
-สุนทรพจน์=sŭn-thon rá pót=speech
-ปลาบปลื้ม=bplàap-bplêum=pleased,glad,рад
-เกียรติ=gìiat=honor
-ผูก=pòok=to attach,bind,tie
-มิตร=mítfriend,ally,companion
-โยน=yohn=to throw
-ทุน=tun=capital,asset,fund
-แข็งแกร่ง=kăeng gràeng=strong,mighty
-ยุติธรรม=yút-dtì tam=fair
-ขาด=kàat=to lack,need,miss
-ขุด=kùt=to dig,excavate,unearth
-เตือน=dteuuan=to remind,warn,advise
+มองข้ามไป=mong kâam bpai=упускать из виду, не замечать
+เคาะ=kór=Стучать
+ช่าง=châang=indeed,really,truly
+กลืน=gleun=to swallow
+เออนี่=er nêe=О, вот. Hey, listen
