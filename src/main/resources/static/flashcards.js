@@ -12,8 +12,12 @@ const DOTTED_CIRCLE = '◌';
  */
 const CARD_MODES = {
 	easy: ['show-thai', 'show-english'],
-	letters: ['show-thai', 'show-english', 'build-thai'],
+	mixed: ['show-thai', 'show-english', 'build-thai'],
+	// Nothing but the letter builder. A word whose Thai contains a space cannot be built
+	// from squares, so pickCardMode falls back to asking for it in writing instead.
+	let: ['build-thai'],
 	'to-thai': ['show-english'],
+	// Kept for the typing cards, though no tab currently offers it.
 	hard: ['show-thai', 'show-english', 'build-thai', 'type-thai'],
 	// Hands-free: always the Thai side, read out and then answered by the app itself.
 	auto: ['show-thai']
