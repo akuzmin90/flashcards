@@ -6,7 +6,7 @@
 ใจไม่ดี=jai mâi dee=тревожно
 วิจัย=wí-jai=research
 ทรงพลัง=song pá-lang=powerful
-เหลือเชื่อ=hăy-leu-chêuua=incredibly
+เหลือเชื่อ=leu-chêuua=incredibly
 เมล็ด=má-lét=seed
 พันธุ์=phan=Порода, семя
 สภาพภูมิอากาศ=sà-phâap phu-mi aa-gàat=climate
@@ -43,7 +43,7 @@
 รายการประกวด=raai gaan bprà-gùuat=Конкурс
 ทดสอบ=thót sòp=to test,examine
 อยู่ๆ=yòo yòo=unexpectedly
-ทำลายล้าง=tam laai láang=destroy
+ทำลายล้าง=tham laai láang=destroy
 ล้าง=láang=to wash,clean
 ยืน=yeun=to stand,stand up
 ข้าง=khâang=side,part
