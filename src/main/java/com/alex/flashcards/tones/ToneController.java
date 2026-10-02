@@ -21,9 +21,10 @@ public class ToneController {
 	}
 
 	@GetMapping("/next")
-	public List<Syllable> next(@RequestParam(defaultValue = "1") int count) {
+	public List<Syllable> next(@RequestParam(defaultValue = "1") int count,
+			@RequestParam(defaultValue = "MIXED") MarkPolicy marks) {
 		int wanted = Math.max(1, Math.min(count, MAX_BATCH));
-		return IntStream.range(0, wanted).mapToObj(i -> quiz.next()).toList();
+		return IntStream.range(0, wanted).mapToObj(i -> quiz.next(marks)).toList();
 	}
 
 }

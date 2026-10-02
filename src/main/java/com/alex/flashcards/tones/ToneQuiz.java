@@ -84,22 +84,34 @@ public class ToneQuiz {
 			vowel(VowelLength.LONG, "โ", "", "", "โ", "", "", true),
 			vowel(VowelLength.LONG, "", "", "อ", "", "", "อ", true));
 
+	/** The vowels that keep a tone mark readable once a final consonant closes the syllable. */
+	private static final List<VowelForm> MARKABLE_WHEN_CLOSED = VOWELS.stream()
+			.filter(VowelForm::markWhenClosed)
+			.toList();
+
 	private static VowelForm vowel(VowelLength length, String openLead, String openAbove, String openTrail,
 			String closedLead, String closedAbove, String closedTrail, boolean markWhenClosed) {
 		return new VowelForm(length, new Spelling(openLead, openAbove, openTrail),
 				new Spelling(closedLead, closedAbove, closedTrail), markWhenClosed);
 	}
 
-	public Syllable next() {
-		VowelForm vowel = pick(VOWELS);
+	public Syllable next(MarkPolicy policy) {
+		ToneMark mark = pickMark(policy);
 		Ending ending = pickEnding();
+		/*
+		 * A closed syllable spelled with ไม้ไต่คู้ drops that sign once a tone mark is written,
+		 * which would leave the vowel length unreadable. Rather than silently dropping the mark
+		 * - which would break a run that is supposed to always have one - those vowels simply
+		 * step aside whenever a mark is due.
+		 */
+		List<VowelForm> candidates = mark != ToneMark.NONE && ending != Ending.NONE
+				? MARKABLE_WHEN_CLOSED
+				: VOWELS;
+		VowelForm vowel = pick(candidates);
 		Spelling spelling = ending == Ending.NONE ? vowel.open() : vowel.closed();
 
 		ConsonantClass consonantClass = pickConsonantClass();
 		String consonant = pickConsonant(consonantClass, spelling);
-
-		boolean markAllowed = ending == Ending.NONE || vowel.markWhenClosed();
-		ToneMark mark = markAllowed ? pickMark() : ToneMark.NONE;
 
 		String text = spelling.lead() + consonant + spelling.above() + written(mark) + spelling.trail()
 				+ pickFinal(ending);
@@ -205,12 +217,18 @@ public class ToneQuiz {
 		};
 	}
 
-	private static ToneMark pickMark() {
-		double roll = ThreadLocalRandom.current().nextDouble();
-		if (roll < MAI_EK_PROBABILITY) {
-			return ToneMark.MAI_EK;
-		}
-		return roll < MAI_EK_PROBABILITY + MAI_THO_PROBABILITY ? ToneMark.MAI_THO : ToneMark.NONE;
+	private static ToneMark pickMark(MarkPolicy policy) {
+		return switch (policy) {
+			case NONE -> ToneMark.NONE;
+			case ALWAYS -> ThreadLocalRandom.current().nextBoolean() ? ToneMark.MAI_EK : ToneMark.MAI_THO;
+			case MIXED -> {
+				double roll = ThreadLocalRandom.current().nextDouble();
+				if (roll < MAI_EK_PROBABILITY) {
+					yield ToneMark.MAI_EK;
+				}
+				yield roll < MAI_EK_PROBABILITY + MAI_THO_PROBABILITY ? ToneMark.MAI_THO : ToneMark.NONE;
+			}
+		};
 	}
 
 	private static <T> T pick(List<T> items) {

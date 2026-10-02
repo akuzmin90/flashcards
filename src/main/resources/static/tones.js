@@ -6,14 +6,29 @@
 import { apiUrl } from './api.js';
 import { canSpeak, isSoundOn, onVoicesChanged, speak, stopSpeaking } from './audio.js';
 
-/** Traditional order — สามัญ, เอก, โท, ตรี, จัตวา — with the pitch contour of each. */
+/**
+ * Traditional order — สามัญ, เอก, โท, ตรี, จัตวา — with the pitch contour of each.
+ *
+ * Drawn in a 60x40 box whose middle line, y=20, is the neutral pitch. Low and High are each
+ * other's mirror about it, and so are Falling and Rising: every y in one pair is 40 minus the
+ * matching y in the other.
+ */
 const TONES = [
-	{ id: 'MID', label: 'Mid', path: 'M8,20 H52' },
-	{ id: 'LOW', label: 'Low', path: 'M8,15 L52,30' },
-	{ id: 'FALLING', label: 'Falling', path: 'M8,26 C16,10 24,8 30,14 C38,22 44,29 52,32' },
-	{ id: 'HIGH', label: 'High', path: 'M8,29 L52,12' },
-	{ id: 'RISING', label: 'Rising', path: 'M8,15 C16,30 24,32 30,28 C38,23 44,13 52,10' }
+	{ id: 'MID', label: 'Mid', path: 'M8,20 H50' },
+	{ id: 'LOW', label: 'Low', path: 'M8,20 L50,31' },
+	{ id: 'FALLING', label: 'Falling', path: 'M8,24 C16,11 24,10 30,14 C37,18 43,26 50,32' },
+	{ id: 'HIGH', label: 'High', path: 'M8,20 L50,9' },
+	{ id: 'RISING', label: 'Rising', path: 'M8,16 C16,29 24,30 30,26 C37,22 43,14 50,8' }
 ];
+
+/** How much of the syllable the rules have to be read from. */
+const MODES = [
+	{ id: 'letters', label: 'Letters', policy: 'NONE', title: 'Never marked - read the tone from the letters alone' },
+	{ id: 'marks', label: 'Marks', policy: 'ALWAYS', title: 'Always mai ek or mai tho' },
+	{ id: 'mixed', label: 'Mixed', policy: 'MIXED', title: 'Marked now and then, as Thai actually comes' }
+];
+
+const DEFAULT_MODE = 'mixed';
 
 const LABELS = {
 	consonantClass: { MIDDLE: 'Middle class', HIGH: 'High class', LOW: 'Low class' },
@@ -29,6 +44,7 @@ const LOW_WATER = 5;
 
 const el = {
 	root: document.getElementById('tones-app'),
+	modeTabs: document.getElementById('tone-modes'),
 	screen: document.getElementById('tones-screen'),
 	errorScreen: document.getElementById('tones-error'),
 	errorMessage: document.getElementById('tones-error-message'),
@@ -52,6 +68,7 @@ const el = {
 };
 
 const state = {
+	mode: DEFAULT_MODE,
 	queue: [],
 	current: null,
 	chosen: null,
@@ -64,9 +81,14 @@ const state = {
 
 let inflight = null;
 
+function policy() {
+	return (MODES.find((mode) => mode.id === state.mode) || MODES[0]).policy;
+}
+
 function refill() {
 	if (!inflight) {
-		inflight = fetch(apiUrl('api/tones/next?count=' + BATCH))
+		const askedFor = policy();
+		inflight = fetch(apiUrl('api/tones/next?count=' + BATCH + '&marks=' + askedFor))
 			.then((response) => {
 				if (!response.ok) {
 					throw new Error('HTTP ' + response.status);
@@ -74,7 +96,10 @@ function refill() {
 				return response.json();
 			})
 			.then((batch) => {
-				state.queue.push(...batch);
+				// A batch ordered under the previous mode is no longer what is being drilled.
+				if (askedFor === policy()) {
+					state.queue.push(...batch);
+				}
 			})
 			.finally(() => {
 				inflight = null;
@@ -90,7 +115,10 @@ async function nextSyllable() {
 		state.current = null;
 		state.answered = false;
 		render();
-		await refill();
+		// One of these can come back empty, having been ordered under the old mode.
+		for (let attempt = 0; attempt < 3 && !state.queue.length; attempt++) {
+			await refill();
+		}
 	}
 	else if (state.queue.length <= LOW_WATER) {
 		refill();
@@ -199,6 +227,30 @@ function showError(message) {
 	el.errorMessage.textContent = message;
 }
 
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function svgNode(name, attributes) {
+	const node = document.createElementNS(SVG_NS, name);
+	Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
+	return node;
+}
+
+/**
+ * An arrowhead for the end of one contour. It lives inside that contour's own <svg> so that
+ * its currentColor resolves to the colour the button is wearing - green, red or blue - which
+ * a shared definition in another element would not do.
+ */
+function arrowhead(id) {
+	const marker = svgNode('marker', {
+		id: id, viewBox: '0 0 10 10', refX: '7.5', refY: '5',
+		markerWidth: '3.2', markerHeight: '3.2', orient: 'auto'
+	});
+	marker.appendChild(svgNode('path', { d: 'M0.5,1 L9.5,5 L0.5,9 Z', fill: 'currentColor' }));
+	const defs = svgNode('defs', {});
+	defs.appendChild(marker);
+	return defs;
+}
+
 function buildToneButtons() {
 	el.grid.textContent = '';
 	TONES.forEach((tone, index) => {
@@ -208,15 +260,14 @@ function buildToneButtons() {
 		button.dataset.tone = tone.id;
 		button.title = tone.label;
 
-		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		svg.setAttribute('viewBox', '0 0 60 40');
-		svg.setAttribute('aria-hidden', 'true');
-		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		path.setAttribute('d', tone.path);
-		path.setAttribute('fill', 'none');
-		path.setAttribute('stroke', 'currentColor');
-		path.setAttribute('stroke-width', '4');
-		path.setAttribute('stroke-linecap', 'round');
+		const markerId = 'tone-arrow-' + tone.id;
+		const svg = svgNode('svg', { viewBox: '0 0 60 40', 'aria-hidden': 'true' });
+		svg.appendChild(arrowhead(markerId));
+		const path = svgNode('path', {
+			d: tone.path, fill: 'none', stroke: 'currentColor',
+			'stroke-width': '4', 'stroke-linecap': 'round',
+			'marker-end': 'url(#' + markerId + ')'
+		});
 		svg.appendChild(path);
 
 		const label = document.createElement('span');
@@ -231,6 +282,32 @@ function buildToneButtons() {
 		button.addEventListener('click', () => choose(tone.id));
 		el.grid.appendChild(button);
 	});
+}
+
+/* ---------- modes ---------- */
+
+function renderModeTabs() {
+	el.modeTabs.textContent = '';
+	MODES.forEach((mode) => {
+		const tab = document.createElement('button');
+		tab.type = 'button';
+		tab.className = 'tab' + (mode.id === state.mode ? ' is-active' : '');
+		tab.dataset.toneMode = mode.id;
+		tab.textContent = mode.label;
+		tab.title = mode.title;
+		el.modeTabs.appendChild(tab);
+	});
+}
+
+function selectMode(id) {
+	if (id === state.mode || !MODES.some((mode) => mode.id === id)) {
+		return;
+	}
+	state.mode = id;
+	// Syllables already queued were made to the old rules, so they go.
+	state.queue = [];
+	renderModeTabs();
+	restart();
 }
 
 /* ---------- the interface the shell drives ---------- */
@@ -281,6 +358,13 @@ export function refresh() {
 
 export function init() {
 	buildToneButtons();
+	renderModeTabs();
+	el.modeTabs.addEventListener('click', (event) => {
+		const tab = event.target.closest('.tab');
+		if (tab && !tab.disabled) {
+			selectMode(tab.dataset.toneMode);
+		}
+	});
 	el.btnNext.addEventListener('click', nextSyllable);
 	el.saySyllable.addEventListener('click', say);
 	onVoicesChanged(render);
