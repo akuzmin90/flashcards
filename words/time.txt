@@ -1,0 +1,43 @@
+มกราคม=má-gà-raa-khom=январь
+กุมภาพันธ์=gum-phaa-phan=февраль
+มีนาคม=mii-naa-khom=март
+เมษายน=mee-sǎa-yon=апрель
+พฤษภาคม=phréut-sà-phaa-khom=май
+มิถุนายน=mí-thù-naa-yon=июнь
+กรกฎาคม=gà-rá-gà-daa-khom=июль
+สิงหาคม=sǐng-hǎa-khom=август
+กันยายน=gan-yaa-yon=сентябрь
+ตุลาคม=dtù-laa-khom=октябрь
+พฤศจิกายน=phréut-sà-jì-gaa-yon=ноябрь
+ธันวาคม=than-waa-khom=декабрь
+วันจันทร์=wan jan=понедельник
+วันอังคาร=wan ang-khaan=вторник
+วันพุธ=wan phút=среда
+วันพฤหัสบดี=wan phá-réu-hàt=четверг
+วันศุกร์=wan sùk=пятница
+วันเสาร์=wan sǎo=суббота
+วันอาทิตย์=wan aa-thít=воскресенье
+เที่ยงคืน=thîiang-kheuun=00:00, полночь
+ตีหนึ่ง=dtii-nèung=01:00
+ตีสอง=dtii-sŏng=02:00
+ตีสาม=dtii-sǎam=03:00
+ตีสี่=dtii-sìi=04:00
+ตีห้า=dtii-hâa=05:00
+หกโมงเช้า=hòk-moong-cháao=06:00
+เจ็ดโมงเช้า=jèt-moong-cháao=07:00
+แปดโมงเช้า=bpàet-moong-cháao=08:00
+เก้าโมงเช้า=gâao-moong-cháao=09:00
+สิบโมงเช้า=sìp-moong-cháao=10:00
+สิบเอ็ดโมงเช้า=sìp-èt-moong-cháao=11:00
+เที่ยง=thîiang=12:00, полдень
+บ่ายโมง=bàai-moong=13:00
+บ่ายสองโมง=bàai-sŏng-moong=14:00
+บ่ายสามโมง=bàai-sǎam-moong=15:00
+สี่โมงเย็น=sìi-moong-yen=16:00
+ห้าโมงเย็น=hâa-moong-yen=17:00
+หกโมงเย็น=hòk-moong-yen=18:00
+หนึ่งทุ่ม=nèung-thûm=19:00
+สองทุ่ม=sŏng-thûm=20:00
+สามทุ่ม=sǎam-thûm=21:00
+สี่ทุ่ม=sìi-thûm=22:00
+ห้าทุ่ม=hâa-thûm=23:00
