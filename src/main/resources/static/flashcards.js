@@ -8,11 +8,12 @@ const DOTTED_CIRCLE = '◌';
 
 /*
  * Which kinds of card each mode draws from. "to-thai" drops the card that shows the Thai
- * side, so the word always has to be recalled rather than recognised.
+ * side, so the word always has to be recalled rather than recognised; "to-ru" is the
+ * reverse - always the Thai side, translated back.
  */
 const CARD_MODES = {
 	easy: ['show-thai', 'show-english'],
-	mixed: ['show-thai', 'show-english', 'build-thai'],
+	'to-ru': ['show-thai'],
 	// Nothing but the letter builder. A word whose Thai contains a space cannot be built
 	// from squares, so pickCardMode falls back to asking for it in writing instead.
 	let: ['build-thai'],
