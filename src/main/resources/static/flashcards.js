@@ -609,10 +609,14 @@ function renderDeckTabs() {
 	state.decks.forEach((deck) => {
 		const tab = document.createElement('button');
 		tab.type = 'button';
-		tab.className = 'tab' + (deck.name === state.deckName ? ' is-active' : '');
+		tab.className = 'tab'
+			+ (deck.name === state.deckName ? ' is-active' : '')
+			+ (deck.aggregate ? ' is-all' : '');
 		tab.dataset.deck = deck.name;
 		tab.textContent = deck.name;
-		tab.title = deck.name + ' - ' + deck.words.length + ' words';
+		tab.title = deck.aggregate
+			? 'Every word from every deck - ' + deck.words.length + ' in all'
+			: deck.name + ' - ' + deck.words.length + ' words';
 		el.deckTabs.appendChild(tab);
 	});
 	// With a single deck there is nothing to choose between.

@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -39,6 +40,9 @@ public class WordService {
 
 	/** Kept at the head of the list, so it is the leftmost tab and the one opened on load. */
 	private static final String DEFAULT_DECK = "words";
+
+	/** The built-in deck of everything, added after the files and shown last. */
+	private static final String ALL_DECK = "all";
 
 	private static final String CLASSPATH_PREFIX = "classpath:";
 
@@ -92,7 +96,7 @@ public class WordService {
 				continue;
 			}
 			withAudio += (int) words.stream().filter(word -> word.audio() != null).count();
-			loaded.add(new Deck(name, words));
+			loaded.add(new Deck(name, words, false));
 			log.info("Loaded deck '{}' with {} words", name, words.size());
 		}
 
@@ -106,7 +110,27 @@ public class WordService {
 		else {
 			log.info("Found {} of {} recordings in {}", withAudio, total, audioDir.toAbsolutePath());
 		}
+
+		// Always last, so the files keep the front of the row to themselves.
+		aggregateOf(loaded).ifPresent(loaded::add);
 		return List.copyOf(loaded);
+	}
+
+	/**
+	 * The built-in deck holding every line from every file, in deck order and as written. A
+	 * word kept in two files stays in twice, and so comes round twice in a session - which is
+	 * only fair, since it was worth writing down twice.
+	 *
+	 * <p>Absent when there is nothing to gather: a single deck, or a real file already
+	 * claiming the name.
+	 */
+	private static Optional<Deck> aggregateOf(List<Deck> decks) {
+		if (decks.size() < 2 || decks.stream().anyMatch(deck -> ALL_DECK.equals(deck.name()))) {
+			return Optional.empty();
+		}
+		List<Word> everything = decks.stream().flatMap(deck -> deck.words().stream()).toList();
+		log.info("Deck '{}' gathers {} words from {} decks", ALL_DECK, everything.size(), decks.size());
+		return Optional.of(new Deck(ALL_DECK, everything, true));
 	}
 
 	/**

@@ -11,6 +11,9 @@
 	--blue-dark: #1d4ed8;
 	--green: #16a34a;
 	--green-dark: #15803d;
+	--green-tint: #e6f6ec;
+	--green-edge: #a8dcba;
+	--green-text: #15803d;
 	--red: #dc2626;
 	--red-dark: #b91c1c;
 	--shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
@@ -32,6 +35,9 @@
 		--blue-dark: #2563eb;
 		--green: #22c55e;
 		--green-dark: #16a34a;
+		--green-tint: #14301f;
+		--green-edge: #2f6a43;
+		--green-text: #4ade80;
 		--red: #ef4444;
 		--red-dark: #dc2626;
 		--shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
@@ -133,6 +139,24 @@ body {
 	background: var(--blue);
 	border-color: var(--blue);
 	box-shadow: none;
+}
+
+/* "all" is not a file but everything at once, so it is tinted rather than plain. */
+.tabs-decks .tab.is-all {
+	color: var(--green-text);
+	background: var(--green-tint);
+	border-color: var(--green-edge);
+}
+
+.tabs-decks .tab.is-all:hover:not(.is-active) {
+	color: var(--green-text);
+	border-color: var(--green);
+}
+
+.tabs-decks .tab.is-all.is-active {
+	color: #fff;
+	background: var(--green);
+	border-color: var(--green);
 }
 
 /* Which flashcard mode — a setting inside the trainer, so it sits quieter. */
