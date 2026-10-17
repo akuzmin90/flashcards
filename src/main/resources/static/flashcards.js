@@ -712,7 +712,8 @@ function renderDeckTabs() {
 		tab.className = 'tab'
 			+ (deck.name === state.deckName ? ' is-active' : '')
 			+ (deck.aggregate ? ' is-all' : '')
-			+ (deck.write ? ' is-write' : '');
+			+ (deck.write ? ' is-write' : '')
+			+ (deck.writing ? ' is-writing' : '');
 		tab.dataset.deck = deck.name;
 		tab.textContent = deck.name;
 		if (deck.write) {
@@ -720,10 +721,12 @@ function renderDeckTabs() {
 				? 'Spelling practice - ' + deck.words.length + ' marked words, typed out in Thai'
 				: 'Spelling practice - tap W under a word to put it here';
 		}
+		else if (deck.aggregate) {
+			tab.title = 'Every word from every deck - ' + deck.words.length + ' in all';
+		}
 		else {
-			tab.title = deck.aggregate
-				? 'Every word from every deck - ' + deck.words.length + ' in all'
-				: deck.name + ' - ' + deck.words.length + ' words';
+			tab.title = deck.name + ' - ' + deck.words.length + ' words'
+				+ (deck.writing ? ', for writing practice and left out of "all"' : '');
 		}
 		el.deckTabs.appendChild(tab);
 	});

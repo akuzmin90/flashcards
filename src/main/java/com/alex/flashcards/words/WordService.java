@@ -44,6 +44,13 @@ public class WordService {
 	/** The built-in deck of everything, added after the files and shown last. */
 	private static final String ALL_DECK = "all";
 
+	/**
+	 * Decks named like this hold words to be practised by writing them out. They are left out
+	 * of the aggregate deck, so a word put there to be spelled does not also come round in
+	 * "all" to be merely recognised.
+	 */
+	private static final String WRITING_PREFIX = "wrt-";
+
 	private static final String CLASSPATH_PREFIX = "classpath:";
 
 	/** Where the build copies the decks to, so a packaged artifact carries its own vocabulary. */
@@ -96,8 +103,10 @@ public class WordService {
 				continue;
 			}
 			withAudio += (int) words.stream().filter(word -> word.audio() != null).count();
-			loaded.add(new Deck(name, words, false));
-			log.info("Loaded deck '{}' with {} words", name, words.size());
+			boolean writing = name.startsWith(WRITING_PREFIX);
+			loaded.add(new Deck(name, words, false, writing));
+			log.info("Loaded deck '{}' with {} words{}", name, words.size(),
+					writing ? " (for writing practice, kept out of '" + ALL_DECK + "')" : "");
 		}
 
 		if (loaded.isEmpty()) {
@@ -121,16 +130,24 @@ public class WordService {
 	 * word kept in two files stays in twice, and so comes round twice in a session - which is
 	 * only fair, since it was worth writing down twice.
 	 *
-	 * <p>Absent when there is nothing to gather: a single deck, or a real file already
-	 * claiming the name.
+	 * <p>Decks for writing practice are not gathered - they are studied on their own terms.
+	 *
+	 * <p>Absent when there is nothing to gather: fewer than two decks to draw on, or a real
+	 * file already claiming the name.
 	 */
 	private static Optional<Deck> aggregateOf(List<Deck> decks) {
-		if (decks.size() < 2 || decks.stream().anyMatch(deck -> ALL_DECK.equals(deck.name()))) {
+		if (decks.stream().anyMatch(deck -> ALL_DECK.equals(deck.name()))) {
 			return Optional.empty();
 		}
-		List<Word> everything = decks.stream().flatMap(deck -> deck.words().stream()).toList();
-		log.info("Deck '{}' gathers {} words from {} decks", ALL_DECK, everything.size(), decks.size());
-		return Optional.of(new Deck(ALL_DECK, everything, true));
+		List<Deck> gathered = decks.stream().filter(deck -> !deck.writing()).toList();
+		if (gathered.size() < 2) {
+			return Optional.empty();
+		}
+		List<Word> everything = gathered.stream().flatMap(deck -> deck.words().stream()).toList();
+		int skipped = decks.size() - gathered.size();
+		log.info("Deck '{}' gathers {} words from {} decks{}", ALL_DECK, everything.size(), gathered.size(),
+				skipped == 0 ? "" : ", leaving out " + skipped + " for writing practice");
+		return Optional.of(new Deck(ALL_DECK, everything, true, false));
 	}
 
 	/**

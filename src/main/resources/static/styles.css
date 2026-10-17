@@ -18,6 +18,10 @@
 	--sky-tint: #e0f2fe;
 	--sky-edge: #a3d8f0;
 	--sky-text: #0369a1;
+	--amber: #ca8a04;
+	--amber-tint: #fdf5d3;
+	--amber-edge: #e4d290;
+	--amber-text: #854d0e;
 	--red: #dc2626;
 	--red-dark: #b91c1c;
 	--shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
@@ -46,6 +50,10 @@
 		--sky-tint: #0d2b3e;
 		--sky-edge: #2d6b8d;
 		--sky-text: #7dd3fc;
+		--amber: #facc15;
+		--amber-tint: #332b0c;
+		--amber-edge: #6f5d1d;
+		--amber-text: #fde047;
 		--red: #ef4444;
 		--red-dark: #dc2626;
 		--shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
@@ -212,6 +220,25 @@ body {
 	color: #fff;
 	background: var(--sky);
 	border-color: var(--sky);
+}
+
+/* A deck of its own to be written out, which is why "all" passes it by. */
+.tabs-decks .tab.is-writing {
+	color: var(--amber-text);
+	background: var(--amber-tint);
+	border-color: var(--amber-edge);
+}
+
+.tabs-decks .tab.is-writing:hover:not(.is-active) {
+	color: var(--amber-text);
+	border-color: var(--amber);
+}
+
+/* Dark ink rather than the white the other chips wear: yellow is too light to carry it. */
+.tabs-decks .tab.is-writing.is-active {
+	color: #2a1f04;
+	background: var(--amber);
+	border-color: var(--amber);
 }
 
 /* Which flashcard mode — a setting inside the trainer, so it sits quieter. */
