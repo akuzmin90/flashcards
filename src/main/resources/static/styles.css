@@ -112,16 +112,45 @@ body {
  * are wrapping chips instead of a third identical pill bar.
  */
 .tabs-decks {
+	/*
+	 * The number of decks only grows, and past a few they ate half a phone screen. Two rows
+	 * are shown and the rest is a scroll away. The chip height is pinned below so that
+	 * "two rows" is an exact measurement rather than a guess at the font's metrics.
+	 */
+	--deck-chip: 2rem;
+	--deck-gap: 0.4rem;
+	max-height: calc(var(--deck-chip) * 2 + var(--deck-gap));
+	overflow-y: auto;
+	/* Reaching the end of the decks should not then start scrolling the page. */
+	overscroll-behavior: contain;
+	align-content: flex-start;
+	scrollbar-width: thin;
+	scrollbar-color: var(--border-strong) transparent;
 	flex-wrap: wrap;
-	gap: 0.4rem;
-	max-width: 100%;
+	gap: var(--deck-gap);
+	width: 100%;
 	margin: 0 auto 0.75rem;
 	padding: 0;
 	background: none;
 }
 
+.tabs-decks::-webkit-scrollbar {
+	width: 6px;
+}
+
+.tabs-decks::-webkit-scrollbar-thumb {
+	background: var(--border-strong);
+	border-radius: 999px;
+}
+
+.tabs-decks::-webkit-scrollbar-track {
+	background: transparent;
+}
+
 .tabs-decks .tab {
-	padding: 0.35rem 0.9rem;
+	height: var(--deck-chip);
+	flex: 0 0 auto;
+	padding: 0 0.9rem;
 	font-size: 0.85rem;
 	color: var(--muted);
 	background: var(--surface);

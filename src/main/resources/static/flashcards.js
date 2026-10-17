@@ -621,6 +621,26 @@ function renderDeckTabs() {
 	});
 	// With a single deck there is nothing to choose between.
 	el.deckTabs.hidden = state.decks.length < 2;
+	keepChosenDeckInSight();
+}
+
+/**
+ * Only two rows of decks are on show, so the chosen one can sit below the fold. Nudges the
+ * strip itself - not the page - just far enough to bring it back.
+ */
+function keepChosenDeckInSight() {
+	const chosen = el.deckTabs.querySelector('.tab.is-active');
+	if (!chosen) {
+		return;
+	}
+	const strip = el.deckTabs.getBoundingClientRect();
+	const chip = chosen.getBoundingClientRect();
+	if (chip.top < strip.top) {
+		el.deckTabs.scrollTop -= strip.top - chip.top;
+	}
+	else if (chip.bottom > strip.bottom) {
+		el.deckTabs.scrollTop += chip.bottom - strip.bottom;
+	}
 }
 
 function selectDeck(name) {
