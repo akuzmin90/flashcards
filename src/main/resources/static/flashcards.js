@@ -21,11 +21,15 @@ const CARD_MODES = {
 	'to-thai': ['show-english'],
 	// Kept for the typing cards, though no tab currently offers it.
 	hard: ['show-thai', 'show-english', 'build-thai', 'type-thai'],
+	// Nothing but the keyboard: the translation is shown and the Thai is typed out. The write
+	// deck runs on this too, since spelling words out by hand is the whole point of it.
+	wrt: ['type-thai'],
 	// Hands-free: always the Thai side, read out and then answered by the app itself.
-	auto: ['show-thai'],
-	// Not a tab but a deck: the write deck exists to be spelled out, so it offers nothing else.
-	write: ['type-thai']
+	auto: ['show-thai']
 };
+
+/** The mode the write deck imposes on itself, whichever tab was last chosen. */
+const WRITE_MODE = 'wrt';
 
 /** Breath between the translation and the next word. */
 const AUTO_PAUSE_MS = 1300;
@@ -123,7 +127,7 @@ let autoPaused = false;
  * whichever tab was last chosen and gives it back on the way out.
  */
 function activeMode() {
-	return state.deckName === WRITE_DECK ? 'write' : state.mode;
+	return state.deckName === WRITE_DECK ? WRITE_MODE : state.mode;
 }
 
 function isAuto() {
