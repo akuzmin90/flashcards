@@ -1,7 +1,8 @@
 /* Vocabulary trainer: three modes, four kinds of card. */
 
 import { canSpeak, isSoundOn, onVoicesChanged, speak, speakTranslation, stopSpeaking } from './audio.js';
-import { loadDecks } from './decks.js';
+import { everyWord, loadDecks } from './decks.js';
+import { WRITE_DECK, isMarked, toggleMark, writeWords } from './write.js';
 
 /** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
 const DOTTED_CIRCLE = '◌';
@@ -21,7 +22,9 @@ const CARD_MODES = {
 	// Kept for the typing cards, though no tab currently offers it.
 	hard: ['show-thai', 'show-english', 'build-thai', 'type-thai'],
 	// Hands-free: always the Thai side, read out and then answered by the app itself.
-	auto: ['show-thai']
+	auto: ['show-thai'],
+	// Not a tab but a deck: the write deck exists to be spelled out, so it offers nothing else.
+	write: ['type-thai']
 };
 
 /** Breath between the translation and the next word. */
@@ -52,12 +55,16 @@ const el = {
 	questionTranscription: document.getElementById('question-transcription'),
 	questionEnglish: document.getElementById('question-english'),
 	sayQuestion: document.getElementById('say-question'),
+	questionTools: document.getElementById('question-tools'),
+	markQuestion: document.getElementById('mark-question'),
 
 	answer: document.getElementById('answer'),
 	answerThai: document.getElementById('answer-thai'),
 	answerTranscription: document.getElementById('answer-transcription'),
 	answerEnglish: document.getElementById('answer-english'),
 	sayAnswer: document.getElementById('say-answer'),
+	answerTools: document.getElementById('answer-tools'),
+	markAnswer: document.getElementById('mark-answer'),
 
 	builder: document.getElementById('builder'),
 	slots: document.getElementById('slots'),
@@ -84,6 +91,8 @@ const el = {
 
 const state = {
 	mode: 'easy',
+	/** What the server sent, untouched; state.decks is this plus the write deck. */
+	serverDecks: [],
 	decks: [],
 	deckName: null,
 	words: [],
@@ -109,8 +118,16 @@ const state = {
 let autoRun = 0;
 let autoPaused = false;
 
+/**
+ * The write deck answers to no mode tab - being in it is a mode of its own, so it wins over
+ * whichever tab was last chosen and gives it back on the way out.
+ */
+function activeMode() {
+	return state.deckName === WRITE_DECK ? 'write' : state.mode;
+}
+
 function isAuto() {
-	return state.mode === 'auto';
+	return activeMode() === 'auto';
 }
 
 function cancelAuto() {
@@ -253,6 +270,20 @@ function updateScoreboard() {
 function startSession() {
 	cancelAuto();
 	autoPaused = false;
+	if (!state.words.length) {
+		// Leave no trace of the deck last studied behind the message.
+		state.deck = [];
+		state.current = null;
+		state.pending = false;
+		state.correct = 0;
+		state.incorrect = 0;
+		updateScoreboard();
+		// Only the write deck can be legitimately empty - it starts that way.
+		showError(state.deckName === WRITE_DECK
+			? 'Nothing marked for writing practice yet. Open any other deck and tap W under a word to put it here.'
+			: 'This deck has no words in it.');
+		return;
+	}
 	state.deck = shuffle(state.words);
 	state.current = null;
 	state.pending = false;
@@ -263,7 +294,7 @@ function startSession() {
 }
 
 function pickCardMode(word) {
-	const modes = CARD_MODES[state.mode] || CARD_MODES.easy;
+	const modes = CARD_MODES[activeMode()] || CARD_MODES.easy;
 	const picked = modes[Math.floor(Math.random() * modes.length)];
 	return picked === 'build-thai' && !canBuild(word) ? 'show-english' : picked;
 }
@@ -469,6 +500,16 @@ function renderGrade() {
 
 /* ---------- rendering ---------- */
 
+function renderMark(button, word) {
+	const marked = isMarked(word);
+	button.classList.toggle('is-on', marked);
+	button.setAttribute('aria-pressed', marked ? 'true' : 'false');
+	button.title = marked
+		? 'In the write deck - tap to remove'
+		: 'Add to the write deck, to practise spelling it';
+	button.setAttribute('aria-label', button.title);
+}
+
 function hintText() {
 	if (isAuto()) {
 		return autoPaused ? 'Paused · Space — resume' : 'Playing on its own · Space — pause';
@@ -505,6 +546,13 @@ function render() {
 	const speakable = isSoundOn() && canSpeak(word.audio);
 	el.sayQuestion.hidden = !showThai || !speakable;
 	el.sayAnswer.hidden = showThai || !speakable;
+	// The W button goes wherever the Thai spelling is - it is that spelling it marks.
+	el.markQuestion.hidden = !showThai;
+	el.markAnswer.hidden = showThai;
+	renderMark(el.markQuestion, word);
+	renderMark(el.markAnswer, word);
+	el.questionTools.hidden = el.sayQuestion.hidden && el.markQuestion.hidden;
+	el.answerTools.hidden = el.sayAnswer.hidden && el.markAnswer.hidden;
 
 	el.answer.hidden = !state.revealed;
 	el.builder.hidden = !building;
@@ -591,6 +639,15 @@ function advance() {
 	nextCard();
 }
 
+/** Puts the word on screen into the write deck, or takes it back out. */
+function markCurrent() {
+	if (!state.current) {
+		return;
+	}
+	toggleMark(state.current);
+	markChanged();
+}
+
 function selectMode(mode) {
 	if (mode === state.mode || !CARD_MODES[mode]) {
 		return;
@@ -604,6 +661,38 @@ function selectMode(mode) {
 
 /* ---------- decks ---------- */
 
+/**
+ * The server's decks with the write deck slipped in just before "all", so the two decks that
+ * are not files sit together at the end of the strip.
+ */
+function composeDecks() {
+	const decks = state.serverDecks.slice();
+	const deck = {
+		name: WRITE_DECK,
+		words: writeWords(everyWord(state.serverDecks)),
+		write: true
+	};
+	const aggregate = decks.findIndex((candidate) => candidate.aggregate);
+	decks.splice(aggregate === -1 ? decks.length : aggregate, 0, deck);
+	return decks;
+}
+
+function writeDeck() {
+	return state.decks.find((deck) => deck.name === WRITE_DECK);
+}
+
+/** The write deck gained or lost a word: its tab, and the W buttons, now say something else. */
+function markChanged() {
+	state.decks = composeDecks();
+	renderDeckTabs();
+	render();
+}
+
+/** The mode tabs mean nothing inside the write deck, which dictates its own. */
+function syncModeTabs() {
+	el.tabs.hidden = state.deckName === WRITE_DECK;
+}
+
 function renderDeckTabs() {
 	el.deckTabs.textContent = '';
 	state.decks.forEach((deck) => {
@@ -611,12 +700,20 @@ function renderDeckTabs() {
 		tab.type = 'button';
 		tab.className = 'tab'
 			+ (deck.name === state.deckName ? ' is-active' : '')
-			+ (deck.aggregate ? ' is-all' : '');
+			+ (deck.aggregate ? ' is-all' : '')
+			+ (deck.write ? ' is-write' : '');
 		tab.dataset.deck = deck.name;
 		tab.textContent = deck.name;
-		tab.title = deck.aggregate
-			? 'Every word from every deck - ' + deck.words.length + ' in all'
-			: deck.name + ' - ' + deck.words.length + ' words';
+		if (deck.write) {
+			tab.title = deck.words.length
+				? 'Spelling practice - ' + deck.words.length + ' marked words, typed out in Thai'
+				: 'Spelling practice - tap W under a word to put it here';
+		}
+		else {
+			tab.title = deck.aggregate
+				? 'Every word from every deck - ' + deck.words.length + ' in all'
+				: deck.name + ' - ' + deck.words.length + ' words';
+		}
 		el.deckTabs.appendChild(tab);
 	});
 	// With a single deck there is nothing to choose between.
@@ -651,6 +748,7 @@ function selectDeck(name) {
 	state.deckName = deck.name;
 	state.words = deck.words;
 	renderDeckTabs();
+	syncModeTabs();
 	startSession();
 }
 
@@ -725,9 +823,14 @@ export function handleKey(event) {
 }
 
 export function restart() {
-	if (state.words.length) {
-		startSession();
+	if (!state.decks.length) {
+		return;
 	}
+	if (state.deckName === WRITE_DECK) {
+		// Words marked during the session join it now rather than at the next deck change.
+		state.words = writeDeck().words;
+	}
+	startSession();
 }
 
 export function activate() {
@@ -766,6 +869,8 @@ export function init() {
 	el.btnRestart.addEventListener('click', startSession);
 	el.sayQuestion.addEventListener('click', say);
 	el.sayAnswer.addEventListener('click', say);
+	el.markQuestion.addEventListener('click', markCurrent);
+	el.markAnswer.addEventListener('click', markCurrent);
 	el.tabs.addEventListener('click', (event) => {
 		const tab = event.target.closest('.tab');
 		if (tab && !tab.disabled) {
@@ -786,15 +891,17 @@ export function init() {
 
 	return loadDecks()
 		.then((decks) => {
-			state.decks = decks;
 			if (!decks.length) {
 				showError('No decks found. Put files like "แด่=dàe=to ; for" into the words directory.');
 				return;
 			}
+			state.serverDecks = decks;
+			state.decks = composeDecks();
 			// The server puts the default deck first, so the leftmost tab is the one to open.
 			state.deckName = decks[0].name;
 			state.words = decks[0].words;
 			renderDeckTabs();
+			syncModeTabs();
 			startSession();
 		})
 		.catch((error) => {
