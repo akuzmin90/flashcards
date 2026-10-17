@@ -1,7 +1,8 @@
-/* Shell: switches between the two trainers and owns the controls they share. */
+/* Shell: switches between the pages and owns the controls they share. */
 
 import { isSoundOn, setSoundOn } from './audio.js';
 import * as flashcards from './flashcards.js';
+import * as search from './search.js';
 import * as tones from './tones.js';
 
 const APPS = {
@@ -15,6 +16,13 @@ const APPS = {
 		module: tones,
 		root: document.getElementById('tones-app'),
 		bar: document.getElementById('tones-bar'),
+		showsProgress: false
+	},
+	search: {
+		module: search,
+		root: document.getElementById('search-app'),
+		// Nothing to keep score of, so no bar of its own.
+		bar: null,
 		showsProgress: false
 	}
 };
@@ -43,7 +51,9 @@ function select(name) {
 	active = name;
 	Object.entries(APPS).forEach(([key, app]) => {
 		app.root.hidden = key !== name;
-		app.bar.hidden = key !== name;
+		if (app.bar) {
+			app.bar.hidden = key !== name;
+		}
 	});
 	el.progress.hidden = !APPS[name].showsProgress;
 	el.tabs.querySelectorAll('.tab').forEach((tab) => {

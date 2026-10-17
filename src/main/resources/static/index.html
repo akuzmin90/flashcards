@@ -12,8 +12,9 @@
 <header class="topbar">
 	<div class="tabs-row">
 		<nav class="tabs tabs-apps" id="app-tabs">
-			<button type="button" class="tab is-active" data-app="flashcards">Flashcards</button>
+			<button type="button" class="tab is-active" data-app="flashcards">Cards</button>
 			<button type="button" class="tab" data-app="tones">Tones</button>
+			<button type="button" class="tab" data-app="search">Search</button>
 		</nav>
 		<div class="topbar-actions">
 			<button type="button" class="icon-btn" id="btn-sound" title="Mute pronunciation" aria-label="Mute pronunciation">
@@ -209,6 +210,18 @@
 		<section id="tones-error" class="screen" hidden>
 			<h1 class="results-title">Tones unavailable</h1>
 			<p class="results-subtitle" id="tones-error-message"></p>
+		</section>
+
+	</div>
+
+	<div class="app-root" id="search-app" hidden>
+
+		<section class="screen search-screen">
+			<input type="search" id="search-input" class="search-input" lang="th"
+					placeholder="Search every deck" autocomplete="off" autocapitalize="off"
+					autocorrect="off" spellcheck="false">
+			<p class="search-note" id="search-note"></p>
+			<ul class="search-results" id="search-results"></ul>
 		</section>
 
 	</div>

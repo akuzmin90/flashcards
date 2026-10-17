@@ -1,7 +1,7 @@
 /* Vocabulary trainer: three modes, four kinds of card. */
 
-import { apiUrl } from './api.js';
 import { canSpeak, isSoundOn, onVoicesChanged, speak, speakTranslation, stopSpeaking } from './audio.js';
+import { loadDecks } from './decks.js';
 
 /** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
 const DOTTED_CIRCLE = '◌';
@@ -784,13 +784,7 @@ export function init() {
 		}
 	});
 
-	return fetch(apiUrl('api/decks'))
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error('HTTP ' + response.status);
-			}
-			return response.json();
-		})
+	return loadDecks()
 		.then((decks) => {
 			state.decks = decks;
 			if (!decks.length) {

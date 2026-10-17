@@ -932,6 +932,119 @@ body.is-compact .answer {
 	}
 }
 
+/* ---------- search ---------- */
+
+/* A list of results reads from the top; centring it would push the first hits off screen. */
+body.is-searching main {
+	align-items: flex-start;
+	padding-bottom: 1.5rem;
+}
+
+.search-screen {
+	gap: 1rem;
+}
+
+.search-input {
+	width: 100%;
+	padding: 0.9rem 1.25rem;
+	font-family: var(--font-thai);
+	font-size: 1.5rem;
+	color: var(--text);
+	background: var(--surface);
+	border: 2px solid var(--border-strong);
+	border-radius: 1rem;
+	box-shadow: var(--shadow);
+	outline: none;
+}
+
+.search-input::placeholder {
+	font-family: var(--font-latin);
+	font-size: 1.05rem;
+	color: var(--muted);
+}
+
+.search-input:focus {
+	border-color: var(--blue);
+}
+
+.search-note {
+	margin: 0;
+	font-size: 0.9rem;
+	color: var(--muted);
+	text-align: center;
+}
+
+.search-results {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.search-hit {
+	position: relative;
+	padding: 0.75rem 3rem 0.75rem 1rem;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 0.9rem;
+	box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+/* Written exactly as asked for - the rest matched only after loosening the spelling. */
+.search-hit.is-exact {
+	border-color: var(--blue);
+}
+
+.search-hit-main {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.search-thai {
+	font-family: var(--font-thai);
+	font-size: 1.6rem;
+	line-height: 1.5;
+	font-weight: 600;
+}
+
+.search-transcription {
+	font-size: 1rem;
+	font-style: italic;
+	color: var(--muted);
+}
+
+.search-english {
+	margin-top: 0.15rem;
+	font-size: 0.95rem;
+}
+
+.search-deck {
+	display: inline-block;
+	margin-top: 0.4rem;
+	padding: 0.15rem 0.55rem;
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--muted);
+	background: var(--surface-soft);
+	border-radius: 999px;
+}
+
+.search-say {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	width: 2rem;
+	height: 2rem;
+	margin-top: 0;
+}
+
 /* ---------- results ---------- */
 
 .results-title {
