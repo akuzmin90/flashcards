@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### What the app writes: the write deck, kept per installation rather than in the repo ###
+/data/

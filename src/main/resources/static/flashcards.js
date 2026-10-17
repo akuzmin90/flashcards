@@ -2,7 +2,7 @@
 
 import { canSpeak, isSoundOn, onVoicesChanged, speak, speakTranslation, stopSpeaking } from './audio.js';
 import { everyWord, loadDecks } from './decks.js';
-import { WRITE_DECK, isMarked, toggleMark, writeWords } from './write.js';
+import { WRITE_DECK, isMarked, onWriteChanged, syncWrite, toggleMark, writeWords } from './write.js';
 
 /** Placeholder a lone combining mark is drawn on, so it is visible on its own tile. */
 const DOTTED_CIRCLE = '◌';
@@ -681,8 +681,15 @@ function writeDeck() {
 	return state.decks.find((deck) => deck.name === WRITE_DECK);
 }
 
-/** The write deck gained or lost a word: its tab, and the W buttons, now say something else. */
+/**
+ * The write deck gained or lost a word - here or on another device: its tab, and the W
+ * buttons, now say something else. A sync can land before the decks do, in which case
+ * there is nothing yet to redraw and composeDecks will pick the marks up on its own.
+ */
 function markChanged() {
+	if (!state.serverDecks.length) {
+		return;
+	}
 	state.decks = composeDecks();
 	renderDeckTabs();
 	render();
@@ -888,6 +895,9 @@ export function init() {
 			render();
 		}
 	});
+	onWriteChanged(markChanged);
+	// Alongside the decks rather than after them: whichever arrives second finds the other.
+	syncWrite();
 
 	return loadDecks()
 		.then((decks) => {
