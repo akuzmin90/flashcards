@@ -224,19 +224,16 @@ body {
 
 /* A deck of its own to be written out, which is why "all" passes it by. */
 .tabs-decks .tab.is-writing {
-	color: var(--amber-text);
 	background: var(--amber-tint);
 	border-color: var(--amber-edge);
 }
 
 .tabs-decks .tab.is-writing:hover:not(.is-active) {
-	color: var(--amber-text);
 	border-color: var(--amber);
 }
 
 /* Dark ink rather than the white the other chips wear: yellow is too light to carry it. */
 .tabs-decks .tab.is-writing.is-active {
-	color: #2a1f04;
 	background: var(--amber);
 	border-color: var(--amber);
 }
