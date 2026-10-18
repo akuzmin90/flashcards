@@ -22,10 +22,17 @@ const TONE_MARKS = /[่-๋]/g;
  */
 const ACCENTS = /[̀-ͯ]/g;
 
-/** Letters near enough to each other that a half-remembered spelling should still find them. */
+/**
+ * Letters near enough to each other that a half-remembered spelling should still find them.
+ *
+ * <p>ะ, ั and า are one vowel written three ways - short, short before a final consonant,
+ * and long - so บาง finds บังเอิญ. The rest are the long and short pairs, which a learner
+ * hears as the same sound, and ง against น.
+ */
 const ALIKE = {
 	'ง': 'น',
 	'ะ': 'า',
+	'ั': 'า',
 	'ี': 'ิ',
 	'ู': 'ุ',
 	'ื': 'ึ'
