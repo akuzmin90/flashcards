@@ -10,7 +10,7 @@
 แจ่มแจ้ง=jàem jâeng=clear,explicit
 ดังไป=dang bpai=Too loud
 ไม่สม่ำเสมอ=mâi sà-màm-sà-mĕr=inconsistent
-เงิบ=ngêrp=speechless,Awkward
+เงิบ=ngêrp=офигеть / обломаться / остаться в неловком шоке
 ไม่ได้จะ=mâi dâai jà=not intending to
 ดีเด่น=dee dèn=outstanding,excellent
 รางวัล=raang-wan=prize,award,trophy
@@ -23,7 +23,7 @@
 ขน=kŏn=carry
 โคตรจะเทพ=kôht jà têp=Absolutely legendary
 ไม่ใช่เรื่องเสียหายเนอะ=mâi châi rêuuang sĭia hăai núh=It's not a bad thing, is it?
-นำหน้า=nam nâa=lead
+นำหน้า=nam nâa=идти впереди / опережать
 หมกมุ่น=mòk mûn=obsessed
 ไปใหญ่โตแล้ว=bpai yài dtoh láew=It's getting out of hand
 คิดไม่ถึงแน่=kít mâi tĕung nâe=You'd never guess.
@@ -33,23 +33,23 @@
 ข้างหลัง=kâang lăng=behind
 ลู่วิ่ง=lôo wîng=Беговая дорожка
 ใหม่ล่าสุด=mài lâa sùt=Последний,Brand new
-ทำตาม=tam dtaam=follow lead,(делай, как говорю)
+ทำตาม=tham dtaam=follow lead,(делай, как говорю)
 ชื่อดัง=chêu dang=famous,well-known,celebrated
 แนวโน้ม=naew nóhm=tendency
 ประหม่า=bprà-màa=to lose self-confidence
 โด่=dòh=to stand erect,stand high
 ทาย=taai=to guess,conjecture
 ต้ม=dtôm=to boil, boiled
-ชดใช้=chót-chái=to compensate,pay
+ชดใช้=chót-chái=возмещать / компенсировать / расплачиваться
 คิดค้น=kít kón=to invent,create,make
 หลง=lŏng=to be lost,get lost,be misguided
 หลงประเด็น=lŏng bprà-den=miss the point
 ประเด็น=bprà-den=point,issue
-เถียง=tĭiang=to dispute,debate,argue
+เถียง=tĭiang=спорить / возражать / пререкаться
 เป้าหมาย=bpâo măai=aim,purpose,goal
 คำสั่ง=kam sàng=command,order
 จัดหา=jàt hăa=to provide
-กลักพา=glàk paa=kidnap
+กลักพา=glàk phaa=kidnap
 เคย=koiie=once,ever,used to
 ค่อย=kôi=постепенно
 ไม่ค่อย=mâi kôi=not really,not especially
@@ -62,12 +62,12 @@
 ไว้ค่อยจัดการ=wái kôi jàt gaan=deal with it later
 ตั้งค่า=dtâng kâa=to set
 กำลัง=gam-lang=power,energy,strength
-สาบาน=săa-baan=to swear,vow,make an oath
+สาบาน=săa-baan=клясться / давать клятву
 คอยดู=koi doo=watch out for,wait and see
 โป๊เปลือย=bpóh bpleuuay=nude
 ประสบการณ์=bprà-sòp gaan=experience
 ทะเยอทะยาน=tá-yer-tá-yaan=[to be] ambitious,[to be] aspiring
-เฝ้าดู=fâo doo=to watch,look at
+เฝ้าดู=fâo doo=наблюдать / следить / присматривать
 ฝักบัว=fàk buua=shower,ceiling shower
 เชื้อเพลิง=chéuua plerngn=fuel
 นางฟ้า=naang fáa=angel,fairy,goddess
