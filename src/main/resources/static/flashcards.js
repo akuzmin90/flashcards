@@ -61,6 +61,7 @@ const el = {
 	sayQuestion: document.getElementById('say-question'),
 	questionTools: document.getElementById('question-tools'),
 	markQuestion: document.getElementById('mark-question'),
+	copyQuestion: document.getElementById('copy-question'),
 
 	answer: document.getElementById('answer'),
 	answerThai: document.getElementById('answer-thai'),
@@ -69,6 +70,7 @@ const el = {
 	sayAnswer: document.getElementById('say-answer'),
 	answerTools: document.getElementById('answer-tools'),
 	markAnswer: document.getElementById('mark-answer'),
+	copyAnswer: document.getElementById('copy-answer'),
 
 	builder: document.getElementById('builder'),
 	slots: document.getElementById('slots'),
@@ -319,6 +321,8 @@ function nextCard() {
 	state.build = state.cardMode === 'build-thai' ? createBuild(state.current.thai) : null;
 	el.input.value = '';
 	el.input.disabled = false;
+	// A tick left over from the last word would look like this one had been copied.
+	clearCopied();
 	render();
 	// A new card starts from its question, not from wherever the last answer left the page.
 	window.scrollTo({ top: 0 });
@@ -553,10 +557,12 @@ function render() {
 	// The W button goes wherever the Thai spelling is - it is that spelling it marks.
 	el.markQuestion.hidden = !showThai;
 	el.markAnswer.hidden = showThai;
+	el.copyQuestion.hidden = !showThai;
+	el.copyAnswer.hidden = showThai;
 	renderMark(el.markQuestion, word);
 	renderMark(el.markAnswer, word);
-	el.questionTools.hidden = el.sayQuestion.hidden && el.markQuestion.hidden;
-	el.answerTools.hidden = el.sayAnswer.hidden && el.markAnswer.hidden;
+	el.questionTools.hidden = el.sayQuestion.hidden && el.markQuestion.hidden && el.copyQuestion.hidden;
+	el.answerTools.hidden = el.sayAnswer.hidden && el.markAnswer.hidden && el.copyAnswer.hidden;
 
 	el.answer.hidden = !state.revealed;
 	el.builder.hidden = !building;
@@ -641,6 +647,66 @@ function advance() {
 		return;
 	}
 	nextCard();
+}
+
+/* ---------- copying the word ---------- */
+
+/** How long the copy button wears its tick before going back to the two sheets. */
+const COPIED_MS = 1200;
+
+let copiedTimer = null;
+
+function clearCopied() {
+	clearTimeout(copiedTimer);
+	el.copyQuestion.classList.remove('is-done');
+	el.copyAnswer.classList.remove('is-done');
+}
+
+/**
+ * The clipboard API only exists in a secure context, and the app may well be served over
+ * plain http, so fall back to the old selection trick rather than leave the button dead.
+ */
+function toClipboard(text) {
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+		return navigator.clipboard.writeText(text).then(() => true, () => selectAndCopy(text));
+	}
+	return Promise.resolve(selectAndCopy(text));
+}
+
+function selectAndCopy(text) {
+	const field = document.createElement('textarea');
+	field.value = text;
+	field.setAttribute('readonly', '');
+	// Off-screen rather than hidden: a field that is not rendered cannot be selected.
+	field.style.position = 'fixed';
+	field.style.top = '-1000px';
+	field.style.opacity = '0';
+	document.body.appendChild(field);
+	field.select();
+	let copied = false;
+	try {
+		copied = document.execCommand('copy');
+	}
+	catch (error) {
+		copied = false;
+	}
+	document.body.removeChild(field);
+	return copied;
+}
+
+/** Copying is silent, so the button says it worked by turning into a green tick. */
+function copyCurrent(button) {
+	if (!state.current) {
+		return;
+	}
+	toClipboard(state.current.thai).then((copied) => {
+		if (!copied) {
+			return;
+		}
+		clearCopied();
+		button.classList.add('is-done');
+		copiedTimer = setTimeout(() => button.classList.remove('is-done'), COPIED_MS);
+	});
 }
 
 /** Puts the word on screen into the write deck, or takes it back out. */
@@ -885,6 +951,8 @@ export function init() {
 	el.sayAnswer.addEventListener('click', say);
 	el.markQuestion.addEventListener('click', markCurrent);
 	el.markAnswer.addEventListener('click', markCurrent);
+	el.copyQuestion.addEventListener('click', () => copyCurrent(el.copyQuestion));
+	el.copyAnswer.addEventListener('click', () => copyCurrent(el.copyAnswer));
 	el.tabs.addEventListener('click', (event) => {
 		const tab = event.target.closest('.tab');
 		if (tab && !tab.disabled) {
